@@ -8,7 +8,7 @@
         </header>
 
         <div class="page-heading">
-            <h3>Update Data Dosen</h3>
+            <h3>Update Data Admin Prodi</h3>
         </div>
 
         <div class="page-content">
@@ -36,15 +36,15 @@
                                         </div>
                                     @endif
 
-                                    <form class="form" action="{{ route('user.update', $user->id) }}" method="POST">
+                                    <form class="form" action="{{ route('admProdi.update', $user->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="name">Nama Dosen</label>
+                                                    <label for="name">Nama Admin</label>
                                                     <input type="text" id="name" class="form-control"
-                                                        placeholder="Nama Dosen" name="name"
+                                                        placeholder="Nama Admin" name="name"
                                                         value="{{ old('name', $user->name) }}">
                                                 </div>
                                             </div>
@@ -154,22 +154,6 @@
                                                     <input type="email" id="email" class="form-control"
                                                         placeholder="Email" name="email"
                                                         value="{{ old('email', $user->email) }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="scholar_id">ID Scholar</label>
-                                                    <input type="text" id="scholar_id" class="form-control"
-                                                        name="scholar_id" placeholder="ID Scholar"
-                                                        value="{{ old('scholar_id', $user->scholar_id) }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="scopus_id">ID Scopus</label>
-                                                    <input type="text" id="scopus_id" class="form-control"
-                                                        name="scopus_id" placeholder="ID Scopus"
-                                                        value="{{ old('scopus_id', $user->scopus_id) }}">
                                                 </div>
                                             </div>
                                             <div class="col-12 d-flex justify-content-end">

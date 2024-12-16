@@ -8,9 +8,8 @@
         </header>
 
         <div class="page-heading">
-            <h3>Update Data Dosen</h3>
+            <h3>Tambah Admin Prodi</h3>
         </div>
-
         <div class="page-content">
             <section id="multiple-column-form">
                 <div class="row match-height">
@@ -28,86 +27,80 @@
                                         </div>
                                     @endif
 
-                                    @if (session('success'))
-                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                            {{ session('success') }}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close"></button>
-                                        </div>
-                                    @endif
-
-                                    <form class="form" action="{{ route('user.update', $user->id) }}" method="POST">
+                                    <form id="dosenForm" method="POST" enctype="multipart/form-data"
+                                        action="{{ route('admProdi.store') }}">
                                         @csrf
-                                        @method('PUT')
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="name">Nama Dosen</label>
-                                                    <input type="text" id="name" class="form-control"
-                                                        placeholder="Nama Dosen" name="name"
-                                                        value="{{ old('name', $user->name) }}">
+                                                    <label for="name">Nama Admin</label>
+                                                    <input type="text" id="name" name="name" class="form-control"
+                                                        placeholder="Nama Admin">
                                                 </div>
                                             </div>
+
                                             @auth
                                                 @if (Auth::user()->role === 'admin')
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-group">
-                                                            <label for="fakultas_id">Fakultas</label>
-                                                            <select class="form-select" id="fakultas_id" name="fakultas_id">
-                                                                <option value="">Pilih Fakultas</option>
-                                                                @foreach ($fakultas as $fakultasItem)
-                                                                    <option value="{{ $fakultasItem->id }}"
-                                                                        {{ $fakultasItem->id == $user->fakultas_id ? 'selected' : '' }}>
-                                                                        {{ $fakultasItem->fakultas_name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
+                                                            <label for="fakultas">Fakultas</label>
+                                                            <fieldset class="form-group">
+                                                                <select class="form-select" id="fakultas" name="fakultas">
+                                                                    <option value="">Pilih Fakultas</option>
+                                                                    @foreach ($fakultas as $fakultasItem)
+                                                                        <option value="{{ $fakultasItem->id }}">
+                                                                            {{ $fakultasItem->fakultas_name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </fieldset>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-group">
-                                                            <label for="prodi_id">Program Studi</label>
-                                                            <select class="form-select" id="prodi_id" name="prodi_id">
-                                                                <option value="">Pilih Program Studi</option>
-                                                                @foreach ($prodis as $prodiItem)
-                                                                    <option value="{{ $prodiItem->id }}"
-                                                                        data-fakultas="{{ $prodiItem->fakultas_id }}"
-                                                                        {{ $prodiItem->id == $user->prodi_id ? 'selected' : '' }}>
-                                                                        {{ $prodiItem->prodi_name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
+                                                            <label for="prodi">Program Studi</label>
+                                                            <fieldset class="form-group">
+                                                                <select class="form-select" id="prodi" name="prodi">
+                                                                    <option value="">Pilih Program Studi</option>
+                                                                    @foreach ($prodis as $prodiItem)
+                                                                        <option value="{{ $prodiItem->id }}"
+                                                                            data-fakultas="{{ $prodiItem->fakultas_id }}">
+                                                                            {{ $prodiItem->prodi_name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </fieldset>
                                                         </div>
                                                     </div>
                                                 @endif
                                                 @if (Auth::user()->role === 'fakultas')
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-group">
-                                                            <label for="fakultas_id">Fakultas</label>
+                                                            <label for="fakultas">Fakultas</label>
                                                             <fieldset class="form-group">
-                                                                <select class="form-select" id="fakultas_id" name="fakultas_id"
+                                                                <select class="form-select" id="fakultas" name="fakultas"
                                                                     disabled>
                                                                     <option value="{{ Auth::user()->fakultas_id }}">
                                                                         {{ Auth::user()->fakultas->fakultas_name }}</option>
                                                                 </select>
-                                                                <input type="hidden" name="fakultas_id"
+                                                                <input type="hidden" name="fakultas"
                                                                     value="{{ Auth::user()->fakultas_id }}">
                                                             </fieldset>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-group">
-                                                            <label for="prodi_id">Program Studi</label>
+                                                            <label for="prodi">Program Studi</label>
                                                             <fieldset class="form-group">
-                                                                <select class="form-select" id="prodi_id" name="prodi_id">
+                                                                <select class="form-select" id="prodi" name="prodi">
                                                                     @foreach ($prodis as $prodiItem)
                                                                         @if ($prodiItem->fakultas_id == Auth::user()->fakultas_id)
-                                                                            <option value="{{ $prodiItem->id }}"
-                                                                                {{ $prodiItem->id == $user->prodi_id ? 'selected' : '' }}>
+                                                                            <option value="{{ $prodiItem->id }}">
                                                                                 {{ $prodiItem->prodi_name }}
                                                                             </option>
                                                                         @endif
                                                                     @endforeach
+
                                                                 </select>
                                                             </fieldset>
                                                         </div>
@@ -116,23 +109,23 @@
                                                 @if (Auth::user()->role === 'prodi')
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-group">
-                                                            <label for="fakultas_id">Fakultas</label>
+                                                            <label for="fakultas">Fakultas</label>
                                                             <fieldset class="form-group">
-                                                                <select class="form-select" id="fakultas_id" name="fakultas_id"
+                                                                <select class="form-select" id="fakultas" name="fakultas"
                                                                     disabled>
                                                                     <option value="{{ Auth::user()->fakultas_id }}">
                                                                         {{ Auth::user()->fakultas->fakultas_name }}</option>
                                                                 </select>
-                                                                <input type="hidden" name="fakultas_id"
+                                                                <input type="hidden" name="fakultas"
                                                                     value="{{ Auth::user()->fakultas_id }}">
                                                             </fieldset>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-group">
-                                                            <label for="prodi_id">Program Studi</label>
+                                                            <label for="prodi">Program Studi</label>
                                                             <fieldset class="form-group">
-                                                                <select class="form-select" id="prodi_id" name="prodi_id"
+                                                                <select class="form-select" id="prodi" name="prodi"
                                                                     disabled>
                                                                     @foreach ($prodis as $prodiItem)
                                                                         <option value="{{ $prodiItem->id }}">
@@ -141,7 +134,7 @@
                                                                     @endforeach
                                                                 </select>
                                                                 <!-- Hidden input to submit the value -->
-                                                                <input type="hidden" name="prodi_id"
+                                                                <input type="hidden" name="prodi"
                                                                     value="{{ $selectedProdiId }}">
                                                             </fieldset>
                                                         </div>
@@ -152,28 +145,30 @@
                                                 <div class="form-group">
                                                     <label for="email">Email</label>
                                                     <input type="email" id="email" class="form-control"
-                                                        placeholder="Email" name="email"
-                                                        value="{{ old('email', $user->email) }}">
+                                                        placeholder="Email" name="email">
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="scholar_id">ID Scholar</label>
-                                                    <input type="text" id="scholar_id" class="form-control"
-                                                        name="scholar_id" placeholder="ID Scholar"
-                                                        value="{{ old('scholar_id', $user->scholar_id) }}">
+                                                    <label for="password">Password</label>
+                                                    <input type="password" id="password" class="form-control"
+                                                        placeholder="Password" name="password">
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="scopus_id">ID Scopus</label>
-                                                    <input type="text" id="scopus_id" class="form-control"
-                                                        name="scopus_id" placeholder="ID Scopus"
-                                                        value="{{ old('scopus_id', $user->scopus_id) }}">
+                                                    <label for="role">Status</label>
+                                                    <input type="text" class="form-control" placeholder="Email"
+                                                        value="Admin Prodi" readonly>
+                                                    <input type="text" id="role" name="role"
+                                                        class="form-control" placeholder="Prodi" value="prodi" readonly
+                                                        hidden>
                                                 </div>
                                             </div>
+
                                             <div class="col-12 d-flex justify-content-end">
-                                                <button type="submit" class="btn btn-primary me-1 mb-1">Update</button>
+                                                <button type="submit" name="user"
+                                                    class="btn btn-primary me-1 mb-1">Submit</button>
                                             </div>
                                         </div>
                                     </form>
@@ -185,41 +180,28 @@
             </section>
         </div>
     </div>
+
 @endsection
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const fakultasSelect = document.getElementById("fakultas_id");
-        const prodiSelect = document.getElementById("prodi_id");
+        const fakultasSelect = document.getElementById("fakultas");
+        const prodiSelect = document.getElementById("prodi");
 
-        // Fungsi untuk memfilter opsi pada dropdown prodi
-        function filterProdi() {
-            const selectedFakultasId = fakultasSelect.value;
+        fakultasSelect.addEventListener("change", function() {
+            const selectedFakultas = this.value;
 
-            // Loop melalui semua opsi pada dropdown prodi
+            // Loop melalui semua opsi di prodi
             Array.from(prodiSelect.options).forEach(option => {
-                // Ambil atribut data-fakultas dari opsi
-                const fakultasId = option.getAttribute("data-fakultas");
-
-                // Tampilkan atau sembunyikan opsi berdasarkan fakultas yang dipilih
-                if (!selectedFakultasId || fakultasId === selectedFakultasId) {
-                    option.style.display = ""; // Tampilkan
+                if (selectedFakultas === "" || option.dataset.fakultas === selectedFakultas) {
+                    option.style.display = ""; // Tampilkan opsi
                 } else {
-                    option.style.display = "none"; // Sembunyikan
+                    option.style.display = "none"; // Sembunyikan opsi
                 }
             });
 
-            // Reset nilai dropdown prodi jika opsi yang sebelumnya dipilih disembunyikan
-            if (!Array.from(prodiSelect.options).some(option => option.value === prodiSelect.value && option
-                    .style.display === "")) {
-                prodiSelect.value = "";
-            }
-        }
-
-        // Jalankan filterProdi setiap kali fakultas berubah
-        fakultasSelect.addEventListener("change", filterProdi);
-
-        // Panggil filterProdi saat halaman pertama kali dimuat
-        filterProdi();
+            // Reset nilai prodi ke default
+            prodiSelect.value = "";
+        });
     });
 </script>

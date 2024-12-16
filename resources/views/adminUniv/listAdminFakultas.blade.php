@@ -9,7 +9,7 @@
 
         <div class="page-heading">
             <h3>List Admin Fakultas</h3>
-            <a href="./tambahDosenFakultas.html" class="btn btn-success btn-md mb-1">Tambah Prodi</a>
+            <a href="{{ route('admFakultas.add') }}" class="btn btn-success btn-md mb-1">Tambah Admin</a>
         </div>
         <div class="page-content">
             <section class="section">
@@ -31,9 +31,17 @@
                                             <td>{{ $admin->fakultas->fakultas_name ?? 'N/A' }}</td>
                                             <td>
                                                 <div class="d-flex flex-column">
-                                                    <a href="./editDosenFakultas.html"
+                                                    <a href="{{ route('admFakultas.edit', $admin->id) }}"
                                                         class="btn btn-primary btn-md mb-1">Edit</a>
-                                                    <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                                    <form action="{{ route('admFakultas.destroy', $admin->id) }}" method="POST"
+                                                        id="deleteForm">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-danger btn-md"
+                                                            data-bs-toggle="modal" data-bs-target="#confirmModal">
+                                                            Delete
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>

@@ -53,33 +53,34 @@ Route::middleware(['auth', 'role:dosen'])->group(function () {
     Route::get('/dosen/dashboard', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
 });
 
-// CRUD
-// ADD Dosen
-Route::get('/tambah-dosen', [AdminController::class, 'tambahDosen'])->name('user.add');
-Route::post('/tambah-dosen', [AdminController::class, 'store'])->name('user.store');
-// EDIT Dosen
-Route::get('/user/{id}/edit', [AdminController::class, 'editDosen'])->name('user.edit');
-Route::put('/user/{id}', [AdminController::class, 'update'])->name('user.update');
-// DESTROY Dosen
-Route::delete('/user/{id}', [AdminController::class, 'destroy'])->name('user.destroy');
+Route::middleware(['auth', 'role:admin,fakultas,prodi'])->group(function () {
+    // CRUD
+    // ADD Dosen
+    Route::get('/tambah-dosen', [AdminController::class, 'tambahDosen'])->name('user.add');
+    Route::post('/tambah-dosen', [AdminController::class, 'store'])->name('user.store');
+    // EDIT Dosen
+    Route::get('/user/{id}/edit', [AdminController::class, 'editDosen'])->name('user.edit');
+    Route::put('/user/{id}', [AdminController::class, 'update'])->name('user.update');
+    // DESTROY Dosen
+    Route::delete('/user/{id}', [AdminController::class, 'destroy'])->name('user.destroy');
 
-// ADD Admin Fakultas 
-Route::get('/tambah-admin-fakultas', [UserController::class, 'user.add']);
-// Route::post('/tambah-admin-fakultas', [AdminController::class, 'store'])->name('user.store');
-// EDIT Admin Fakultas
-Route::get('/user2/{id}/edit2', [UserController::class, 'edit2'])->name('user2.edit2');
-Route::put('/user2/{id}', [UserController::class, 'update2'])->name('user2.update2');
-// DESTROY Admin Fakultas
-Route::delete('/user2/{id}', [UserController::class, 'destroy2'])->name('user2.destroy2');
+    // ADD Admin Fakultas 
+    Route::get('/tambah-admin-fakultas', [AdminController::class, 'tambahAdmFakultas'])->name('admFakultas.add');
+    Route::post('/tambah-admin-fakultas', [AdminController::class, 'storeAdmFakultas'])->name('admFakultas.store');
+    // EDIT Admin Fakultas
+    Route::get('/admin-fakultas/{id}/edit', [AdminController::class, 'editAdmFakultas'])->name('admFakultas.edit');
+    Route::put('/admin-fakultas/{id}', [AdminController::class, 'updateAdmFakultas'])->name('admFakultas.update');
+    // DESTROY Admin Fakultas
+    Route::delete('/admin-fakultas/{id}', [AdminController::class, 'destroyAdmFakultas'])->name('admFakultas.destroy');
 
-// ADD Admin Prodi
-Route::get('/tambahAdminProdiUniv', [UserController::class, 'tambahAdminProdiUniv']);
-Route::post('/adminProdiUniv', [UserController::class, 'store3'])->name('user3.store3');
-// EDIT Admin Prodi 
-Route::get('/user3/{id}/edit3', [UserController::class, 'edit3'])->name('user3.edit3');
-Route::put('/user3/{id}', [UserController::class, 'update3'])->name('user3.update3');
-// DESTROY Admin Prodi
-Route::delete('/user3/{id}', [UserController::class, 'destroy3'])->name('user3.destroy3');
-
+    // ADD Admin Prodi
+    Route::get('/tambah-admin-prodi', [AdminController::class, 'tambahAdmProdi'])->name('admProdi.add');
+    Route::post('/tambah-admin-prodi', [AdminController::class, 'storeAdmProdi'])->name('admProdi.store');
+    // EDIT Admin Prodi 
+    Route::get('/admin-prodi/{id}/edit', [AdminController::class, 'editAdmProdi'])->name('admProdi.edit');
+    Route::put('/admin-prodi/{id}', [AdminController::class, 'updateAdmProdi'])->name('admProdi.update');
+    // DESTROY Admin Prodi
+    Route::delete('/admin-prodi/{id}', [AdminController::class, 'destroyAdmProdi'])->name('admProdi.destroy');
+});
 
 require __DIR__ . '/auth.php';

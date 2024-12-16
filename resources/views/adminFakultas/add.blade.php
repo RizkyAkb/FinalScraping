@@ -8,7 +8,7 @@
         </header>
 
         <div class="page-heading">
-            <h3>Tambah Dosen</h3>
+            <h3>Tambah Admin Fakultas</h3>
         </div>
         <div class="page-content">
             <section id="multiple-column-form">
@@ -28,14 +28,14 @@
                                     @endif
 
                                     <form id="dosenForm" method="POST" enctype="multipart/form-data"
-                                        action="{{ route('user.store') }}">
+                                        action="{{ route('admFakultas.store') }}">
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="name">Nama Dosen</label>
+                                                    <label for="name">Nama Admin</label>
                                                     <input type="text" id="name" name="name" class="form-control"
-                                                        placeholder="Nama Dosen">
+                                                        placeholder="Nama Admin">
                                                 </div>
                                             </div>
 
@@ -55,23 +55,7 @@
                                                                 </select>
                                                             </fieldset>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="form-group">
-                                                            <label for="prodi">Program Studi</label>
-                                                            <fieldset class="form-group">
-                                                                <select class="form-select" id="prodi" name="prodi">
-                                                                    <option value="">Pilih Program Studi</option>
-                                                                    @foreach ($prodis as $prodiItem)
-                                                                        <option value="{{ $prodiItem->id }}"
-                                                                            data-fakultas="{{ $prodiItem->fakultas_id }}">
-                                                                            {{ $prodiItem->prodi_name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </fieldset>
-                                                        </div>
-                                                    </div>
+                                                    </div>                                                   
                                                 @endif
                                                 @if (Auth::user()->role === 'fakultas')
                                                     <div class="col-md-6 col-12">
@@ -87,24 +71,7 @@
                                                                     value="{{ Auth::user()->fakultas_id }}">
                                                             </fieldset>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="form-group">
-                                                            <label for="prodi">Program Studi</label>
-                                                            <fieldset class="form-group">
-                                                                <select class="form-select" id="prodi" name="prodi">
-                                                                    @foreach ($prodis as $prodiItem)
-                                                                        @if ($prodiItem->fakultas_id == Auth::user()->fakultas_id)
-                                                                            <option value="{{ $prodiItem->id }}">
-                                                                                {{ $prodiItem->prodi_name }}
-                                                                            </option>
-                                                                        @endif
-                                                                    @endforeach
-
-                                                                </select>
-                                                            </fieldset>
-                                                        </div>
-                                                    </div>
+                                                    </div>                                                    
                                                 @endif
                                                 @if (Auth::user()->role === 'prodi')
                                                     <div class="col-md-6 col-12">
@@ -120,25 +87,7 @@
                                                                     value="{{ Auth::user()->fakultas_id }}">
                                                             </fieldset>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="form-group">
-                                                            <label for="prodi">Program Studi</label>
-                                                            <fieldset class="form-group">
-                                                                <select class="form-select" id="prodi" name="prodi"
-                                                                    disabled>
-                                                                    @foreach ($prodis as $prodiItem)
-                                                                        <option value="{{ $prodiItem->id }}">
-                                                                            {{ $prodiItem->prodi_name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <!-- Hidden input to submit the value -->
-                                                                <input type="hidden" name="prodi"
-                                                                    value="{{ $selectedProdiId }}">
-                                                            </fieldset>
-                                                        </div>
-                                                    </div>
+                                                    </div>                                                    
                                                 @endif
                                             @endauth
                                             <div class="col-md-6 col-12">
@@ -158,22 +107,11 @@
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
                                                     <label for="role">Status</label>
+                                                    <input type="text" class="form-control" placeholder="Email"
+                                                        value="Admin Fakultas" readonly>
                                                     <input type="text" id="role" name="role"
-                                                        class="form-control" placeholder="Dosen" value="dosen" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="scholar_id">ID Scholar</label>
-                                                    <input type="text" id="scholar_id" class="form-control"
-                                                        name="scholar_id" placeholder="ID Scholar">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="scopus_id">ID Scopus</label>
-                                                    <input type="text" id="scopus_id" class="form-control"
-                                                        name="scopus_id" placeholder="ID Scopus">
+                                                        class="form-control" placeholder="Fakultas" value="fakultas" readonly
+                                                        hidden>
                                                 </div>
                                             </div>
 
@@ -191,6 +129,7 @@
             </section>
         </div>
     </div>
+
 @endsection
 
 <script>
