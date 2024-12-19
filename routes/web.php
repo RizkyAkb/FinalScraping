@@ -32,6 +32,27 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dosen', [AdminController::class, 'listDosen'])->name('admin.listDosen');
     Route::get('/admin/admin-fakultas', [AdminController::class, 'listAdminFakultas'])->name('admin.listAdminFakultas');
     Route::get('/admin/admin-prodi', [AdminController::class, 'listAdminProdi'])->name('admin.listAdminProdi');
+
+    //CRUD FAKULTAS
+    // ADD Fakultas    
+    Route::get('/fakultas', [FakultasController::class, 'create'])->name('fakultas.create');
+    Route::post('/tambah-fakultas', [FakultasController::class, 'store'])->name('fakultas.store');
+    // EDIT Fakultas
+    Route::get('/fakultas/{id}/edit', [FakultasController::class, 'edit'])->name('fakultas.edit');
+    Route::put('/fakultas/{id}', [FakultasController::class, 'update'])->name('fakultas.update');
+    // DESTROY Fakultas
+    Route::delete('/fakultas/{id}', [FakultasController::class, 'destroy'])->name('fakultas.destroy');
+
+    //CRUD PRODI
+    // ADD Prodi    
+    Route::get('/prodi', [ProdiController::class, 'create'])->name('prodi.create');
+    Route::post('/tambah-prodi', [ProdiController::class, 'store'])->name('prodi.store');
+    // EDIT Prodi
+    Route::get('/prodi/{id}/edit', [ProdiController::class, 'edit'])->name('prodi.edit');
+    Route::put('/prodi/{id}', [ProdiController::class, 'update'])->name('prodi.update');
+    // DESTROY Prodi
+    Route::delete('/prodi/{id}', [ProdiController::class, 'destroy'])->name('prodi.destroy');
+
 });
 
 //Admin Fakultas
