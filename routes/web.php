@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\ScrapingController;
 
 
 Route::get('/', function () {
@@ -103,5 +104,10 @@ Route::middleware(['auth', 'role:admin,fakultas,prodi'])->group(function () {
     // DESTROY Admin Prodi
     Route::delete('/admin-prodi/{id}', [AdminController::class, 'destroyAdmProdi'])->name('admProdi.destroy');
 });
+
+Route::get('/scrape/scopus/{scopus_id}', [ScrapingController::class, 'scrapeScopus']);
+Route::get('/scrape/scholar/{scholar_id}', [ScrapingController::class, 'scrapeScholar']);
+
+Route::get('/scrape/tes', [ScrapingController::class, 'scrapePublications'])->name('scrapeAll');
 
 require __DIR__ . '/auth.php';

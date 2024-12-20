@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Fakultas;
 use App\Models\Prodi;
 use App\Models\User;
+use App\Models\Publikasi;
 
 class AdminController extends Controller
 {
@@ -15,14 +16,14 @@ class AdminController extends Controller
         $fakultas = Fakultas::count();
         $prodi = Prodi::count();
         $dosen = User::where('role', 'dosen')->count();
-        $artikel = Fakultas::count();
+        $artikel = Publikasi::count();
         return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel'));
     }
 
     public function statistik()
     {
-        $faculties = Fakultas::all();
-        return view('adminUniv.statistik', compact('faculties'));
+        $artikels = Publikasi::take(10)->get();
+        return view('adminUniv.statistik', compact('artikels'));
     }
 
 
