@@ -27,7 +27,7 @@
         <link href="{{ asset('assets/compiled/css/iconly.css') }}" rel="stylesheet">
     </head>
 
-    <body>
+    <body onload=getDataUniversitas()>
         <script src="assets/static/js/initTheme.js"></script>
         <div id="app">
             <div id="sidebar">
@@ -301,13 +301,58 @@
             </div>
             <script src="../assets/static/js/components/dark.js"></script>
             <script src="../assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
             <script src="../assets/compiled/js/app.js"></script>
+            <!-- Need: Apexcharts -->
 
-            <script src="../assets/extensions/jquery/jquery.min.js"></script>
-            <script src="../assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-            <script src="../assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
-            <script src="../assets/static/js/pages/datatables.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/collect.js/4.36.1/collect.min.js" integrity="sha512-aub0tRfsNTyfYpvUs0e9G/QRsIDgKmm4x59WRkHeWUc3CXbdiMwiMQ5tTSElshZu2LCq8piM/cbIsNwuuIR4gA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script>
+                $(document).ready(function () {
+                    fetchPublicationData();
+                });
+
+                function fetchPublicationData() {
+                    $.ajax({
+                        url: '/api/publikasi-data',
+                        method: 'GET',
+                        success: function (response) {
+                            const labels = response.map(item => item.year);
+                            const data = response.map(item => item.total);
+
+                            renderChart(labels, data);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error fetching data:', error);
+                        }
+                    });
+                }
+
+                function renderChart(labels, data) {
+                    const ctx = document.getElementById('universitas').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Publikasi per Tahun',
+                                data: data,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+            </script>
 
     </body>
 

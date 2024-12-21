@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Publikasi;
+use App\Models\Fakultas;
+use App\Models\Prodi;
+
 use Goutte\Client;
 
 class ScrapingController extends Controller

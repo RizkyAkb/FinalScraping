@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Fakultas;
+use App\Models\Publikasi;
 use App\Models\Prodi;
 use App\Models\User;
 
@@ -16,9 +17,15 @@ class AdminController extends Controller
         $prodi = Prodi::count();
         $dosen = User::where('role', 'dosen')->count();
         $artikel = Fakultas::count();
-        return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel'));
-    }
 
+        // Data untuk chart
+        $publikasiData = Publikasi::selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
+            ->groupBy('year')
+            ->orderBy('year')
+            ->get();
+
+        return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel', 'publikasiData'));
+    }
     public function statistik()
     {
         $faculties = Fakultas::all();

@@ -85,10 +85,10 @@
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Statistik Sitasi Artikel Jurnal Fakultas</h4>
+                            <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
                         </div>
                         <div class="card-body">
-                            <canvas id="fakultas"></canvas>
+                            <canvas id="universitas" width="400" height="200"></canvas>
                         </div>
                     </div>
                 </div>
@@ -111,4 +111,5 @@
             </section>
         </div>
     </div>
+    
 @endsection
