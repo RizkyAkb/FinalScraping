@@ -45,8 +45,8 @@ class ScrapingController extends Controller
         if ($articles) {
             foreach ($articles as $article) {
                 if (!empty($article['title']) && !empty($article['author_name'])) {
-                    Publikasi::create([           
-                        'author_id' => $author_id ?? 'Unknown',             
+                    Publikasi::create([
+                        'author_id' => $author_id ?? 'Unknown',
                         'title' => $article['title'],
                         'journal_name' => $article['journal_name'] ?? 'Unknown',
                         'publication_date' => $article['publication_date'] ?? null,
@@ -127,6 +127,15 @@ class ScrapingController extends Controller
         }
         curl_close($ch);
 
+        // Simpan respon untuk debugging jika diperlukan
+        file_put_contents('response_log.html', $response);
+
+        // Periksa apakah ada CAPTCHA dalam respon
+        if (strpos($response, 'id="recaptcha"') !== false) {
+            file_put_contents('scholar_error_log.txt', "CAPTCHA detected for URL: $base_url\n", FILE_APPEND);
+            return null;
+        }
+
         $dom = new \DOMDocument();
         @$dom->loadHTML($response);
         $xpath = new \DOMXPath($dom);
@@ -134,23 +143,24 @@ class ScrapingController extends Controller
 
         foreach ($xpath->query('//tr[@class="gsc_a_tr"]') as $article) {
             $titleNode = $xpath->query('.//a[@class="gsc_a_at"]', $article)->item(0);
-            $title = $titleNode ? $titleNode->textContent : 'Unknown';
+            $title = $titleNode ? trim($titleNode->textContent) : 'Unknown';
 
             $authorNode = $xpath->query('.//div[@class="gs_gray"]', $article)->item(0);
-            $author = $authorNode ? $authorNode->textContent : 'Unknown';
+            $author = $authorNode ? trim($authorNode->textContent) : 'Unknown';
 
             $journalNode = $xpath->query('.//div[@class="gs_gray"]', $article)->item(1);
-            $journal = $journalNode ? $journalNode->textContent : 'Unknown';
+            $journal = $journalNode ? trim($journalNode->textContent) : 'Unknown';
 
             $yearNode = $xpath->query('.//span[@class="gsc_a_h gsc_a_hc gs_ibl"]', $article)->item(0);
-            $year = $yearNode ? $yearNode->textContent : null;
+            $year = $yearNode ? trim($yearNode->textContent) : null;
 
             $citationNode = $xpath->query('.//a[contains(@href,"cites")]', $article)->item(0);
             $citations = $citationNode ? preg_replace('/\D/', '', $citationNode->textContent) : 0;
 
             if ($title !== 'Unknown') {
                 $articles[] = [
-                    'title' => $title,                    
+                    'title' => $title,
+                    'author_name' => $author,
                     'journal_name' => $journal,
                     'publication_date' => $year,
                     'citations' => $citations,
@@ -158,6 +168,9 @@ class ScrapingController extends Controller
                 ];
             }
         }
+
+        // Simpan data artikel untuk debugging
+        file_put_contents('articles_log.txt', print_r($articles, true), FILE_APPEND);
 
         return $articles;
     }
