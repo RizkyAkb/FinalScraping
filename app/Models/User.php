@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Prodi::class);
     }
+
+    public function publikasi()
+    {
+        return $this->hasMany(Publikasi::class, 'author_id');
+    }
 }

@@ -63,20 +63,20 @@ class ScrapingController extends Controller
 
     public function scrapePublications()
     {
-        $authors = DB::table('authors')->select('id_scopus', 'id_scholar', 'id')->get();
+        $authors = DB::table('users')->select('scopus_id', 'scholar_id', 'id')->where('role', 'dosen')->get();
         $api_key = '2f3be97cfe6cc239b0a9f325a660d9c1';
         $base_url = 'https://api.elsevier.com/content/';
 
         foreach ($authors as $author) {
-            if (!empty($author->id_scholar)) {
-                $this->scrapeScholar($author->id_scholar, $author->id);
+            if (!empty($author->scholar_id)) {
+                $this->scrapeScholar($author->scholar_id, $author->id);
                 sleep(2); // Delay to avoid quick scraping
             }
         }
 
         foreach ($authors as $author) {
-            if (!empty($author->id_scopus)) {
-                $this->scrapeScopus($author->id_scopus, $author->id);
+            if (!empty($author->scopus_id)) {
+                $this->scrapeScopus($author->scopus_id, $author->id);
                 sleep(2); // Delay to avoid quick scraping
             }
         }

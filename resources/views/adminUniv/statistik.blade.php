@@ -9,7 +9,7 @@
         <div class="page-content">
             <section class="section">
                 <div class="d-flex justify-content-end">
-                    <a href="#" class="btn btn-primary btn-lg">Scraping Data</a>
+                    <a href="{{ route('scrapeAll') }}" class="btn btn-primary btn-lg">Scraping Data</a>
                 </div>
                 <div class="page-heading">
                     <h3>Data Publikasi dan Sitasi Dosen Fakultas ..</h3>
@@ -30,16 +30,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Totok</td>
-                                        <td>Pendidikan Biologi</td>
-                                        <td>Cara Mengawinkan Silang Sapi dengan Kambing</td>
-                                        <td>
-                                            2018
-                                        </td>
-                                        <td>751</td>
-                                        <td>Scopus</td>
-                                    </tr>
+                                    @forelse ($artikels as $artikel)
+                                        <tr>
+                                            <td>{{ $artikel->user->name }}</td>
+                                            <td>{{ $artikel->user->prodi->prodi_name }}</td>
+                                            <td>{{ $artikel->tittle }}</td>
+                                            <td>'N/A'</td>
+                                            <td>'N/A'</td>
+                                            <td>'N/A'</td>
+                                            <td>                                                
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td class="text-center text-mute" colspan="4">Data Fakultas Tidak Ditemukan
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

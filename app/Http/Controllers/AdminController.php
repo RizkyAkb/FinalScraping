@@ -8,6 +8,7 @@ use App\Models\Fakultas;
 use App\Models\Publikasi;
 use App\Models\Prodi;
 use App\Models\User;
+use App\Models\Publikasi;
 
 class AdminController extends Controller
 {
@@ -16,7 +17,13 @@ class AdminController extends Controller
         $fakultas = Fakultas::count();
         $prodi = Prodi::count();
         $dosen = User::where('role', 'dosen')->count();
+<<<<<<< HEAD
         $artikel = Fakultas::count();
+=======
+        $artikel = Publikasi::count();
+        return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel'));
+    }
+>>>>>>> 920678aa985914f0fe086cfa77b67dc9645ea4ec
 
         // Data untuk chart
         $publikasiData = Publikasi::selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
@@ -28,8 +35,8 @@ class AdminController extends Controller
     }
     public function statistik()
     {
-        $faculties = Fakultas::all();
-        return view('adminUniv.statistik', compact('faculties'));
+        $artikels = Publikasi::take(10)->get();
+        return view('adminUniv.statistik', compact('artikels'));
     }
 
 
