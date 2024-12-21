@@ -8,31 +8,48 @@ use App\Models\Fakultas;
 use App\Models\Publikasi;
 use App\Models\Prodi;
 use App\Models\User;
-use App\Models\Publikasi;
+
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
+        // Statistik
+        $faculties = Fakultas::all();
+        $prodies = Prodi::all();
         $fakultas = Fakultas::count();
         $prodi = Prodi::count();
         $dosen = User::where('role', 'dosen')->count();
-<<<<<<< HEAD
-        $artikel = Fakultas::count();
-=======
-        $artikel = Publikasi::count();
-        return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel'));
-    }
->>>>>>> 920678aa985914f0fe086cfa77b67dc9645ea4ec
+        $artikel = Publikasi::count(); // Jumlah artikel jurnal
 
-        // Data untuk chart
-        $publikasiData = Publikasi::selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
+        // Ambil parameter filter dari request
+        $fakultasId = $request->get('fakultas_id');
+        $prodiId = $request->get('prodi_id');
+
+        // Query publikasi dengan filter atau tanpa filter
+        $publikasiData = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
+            ->when($fakultasId, function ($query, $fakultasId) {
+                return $query->where('users.fakultas_id', $fakultasId);
+            })
+            ->when($prodiId, function ($query, $prodiId) {
+                return $query->where('users.prodi_id', $prodiId);
+            })
+            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total") // SQLite strftime
             ->groupBy('year')
-            ->orderBy('year')
+            ->orderBy('year', 'asc')
             ->get();
 
-        return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel', 'publikasiData'));
+        if ($request->ajax()) {
+            return response()->json(['publikasiData' => $publikasiData]);
+        }
+
+        return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel', 'publikasiData', 'faculties', 'prodies'));
     }
+
+
+
+
+
     public function statistik()
     {
         $artikels = Publikasi::take(10)->get();

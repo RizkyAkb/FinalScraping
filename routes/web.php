@@ -7,11 +7,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\DosenController;
-<<<<<<< HEAD
 use App\Http\Controllers\PublikasiController;
-=======
 use App\Http\Controllers\ScrapingController;
->>>>>>> 920678aa985914f0fe086cfa77b67dc9645ea4ec
 
 
 Route::get('/', function () {
@@ -31,7 +28,8 @@ Route::middleware('auth')->group(function () {
 //Admin Univ
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/api/publikasi-data', [PublikasiController::class, 'getPublicationData']);    Route::get('/admin/statistik', [AdminController::class, 'statistik'])->name('admin.statistik');
+    Route::get('/api/publikasi-data', [PublikasiController::class, 'getPublicationData']);    
+    Route::get('/admin/statistik', [AdminController::class, 'statistik'])->name('admin.statistik');
     Route::get('/admin/fakultas', [AdminController::class, 'listFakultas'])->name('admin.listFakultas');
     Route::get('/admin/prodi', [AdminController::class, 'listProdi'])->name('admin.listProdi');
     Route::get('/admin/dosen', [AdminController::class, 'listDosen'])->name('admin.listDosen');

@@ -309,41 +309,51 @@
             <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/collect.js/4.36.1/collect.min.js" integrity="sha512-aub0tRfsNTyfYpvUs0e9G/QRsIDgKmm4x59WRkHeWUc3CXbdiMwiMQ5tTSElshZu2LCq8piM/cbIsNwuuIR4gA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <script>
-                $(document).ready(function () {
-                    fetchPublicationData();
-                });
+                window.onload = function () {
+                    // Render chart dengan data awal
+                    renderChart(JSON.parse(document.getElementById('initial-data').textContent));
 
-                function fetchPublicationData() {
-                    $.ajax({
-                        url: '/api/publikasi-data',
-                        method: 'GET',
-                        success: function (response) {
-                            const labels = response.map(item => item.year);
-                            const data = response.map(item => item.total);
+                    // Tombol untuk menerapkan filter
+                    document.getElementById('apply-filters').onclick = function () {
+                        var prodiId = document.getElementById('filter-year').value;
+                        var fakultasId = document.getElementById('filter-faculty').value;
 
-                            renderChart(labels, data);
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error fetching data:', error);
-                        }
-                    });
-                }
+                        // Kirim request melalui AJAX
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('GET', '/dashboard?fakultas_id=' + fakultasId + '&prodi_id=' + prodiId, true);
+                        xhr.onload = function () {
+                            if (xhr.status === 200) {
+                                var data = JSON.parse(xhr.responseText);
+                                renderChart(data.publikasiData);
+                            }
+                        };
+                        xhr.send();
+                    };
+                };
 
-                function renderChart(labels, data) {
-                    const ctx = document.getElementById('universitas').getContext('2d');
-                    new Chart(ctx, {
+                function renderChart(data) {
+                    var ctx = document.getElementById('universitas').getContext('2d');
+                    if (window.myChart) {
+                        window.myChart.destroy();
+                    }
+                    window.myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: labels,
+                            labels: data.map(function (item) {
+                                return item.year;
+                            }),
                             datasets: [{
-                                label: 'Publikasi per Tahun',
-                                data: data,
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
+                                label: 'Jumlah Artikel',
+                                data: data.map(function (item) {
+                                    return item.total;
+                                }),
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
                                 borderWidth: 1
                             }]
                         },
                         options: {
+                            responsive: true,
                             scales: {
                                 y: {
                                     beginAtZero: true
@@ -352,7 +362,10 @@
                         }
                     });
                 }
+
             </script>
+
+
 
     </body>
 
