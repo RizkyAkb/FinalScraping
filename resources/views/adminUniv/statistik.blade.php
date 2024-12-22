@@ -9,8 +9,9 @@
         <div class="page-content">
             <section class="section">
                 <div class="d-flex justify-content-end">
-                    <a href="{{ route('scrapeAll') }}" class="btn btn-primary btn-lg">Scraping Data</a>
+                    <a href="{{ route('scrapeAll') }}" class="btn btn-primary btn-lg" id="scrapeButton">Scraping Data</a>
                 </div>
+
                 <div class="page-heading">
                     <h3>Data Publikasi dan Sitasi Dosen Fakultas ..</h3>
 
@@ -34,12 +35,10 @@
                                         <tr>
                                             <td>{{ $artikel->user->name }}</td>
                                             <td>{{ $artikel->user->prodi->prodi_name }}</td>
-                                            <td>{{ $artikel->tittle }}</td>
-                                            <td>'N/A'</td>
-                                            <td>'N/A'</td>
-                                            <td>'N/A'</td>
-                                            <td>                                                
-                                            </td>
+                                            <td>{{ $artikel->title }}</td>
+                                            <td>{{ $artikel->publication_date }}</td>
+                                            <td>{{ $artikel->citations }}</td>
+                                            <td>{{ $artikel->source }}</td>                                            
                                         </tr>
                                     @empty
                                         <tr>
@@ -178,3 +177,48 @@
         </div>
     </div>
 @endsection
+
+<!-- Modal -->
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p>Proses scraping sedang berlangsung, harap menunggu...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('scrapeButton').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default link behavior
+
+        // Show the loading modal
+        const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+        loadingModal.show();
+
+        // Send the AJAX request
+        fetch(this.href, {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide the loading modal
+                loadingModal.hide();
+
+                // Display success message
+                alert(data.message);
+            })
+            .catch(error => {
+                // Hide the loading modal if there's an error
+                loadingModal.hide();
+
+                // Display error message
+                alert('Terjadi kesalahan: ' + error.message);
+            });
+    });
+</script>

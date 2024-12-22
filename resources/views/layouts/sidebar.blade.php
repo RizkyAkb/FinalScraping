@@ -17,6 +17,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
         <link rel="stylesheet" href="../assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+        {{-- <link rel="stylesheet" href="assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css"> --}}
+
 
         <link rel="stylesheet" href="../assets/compiled/css/table-datatable-jquery.css">
         <link rel="stylesheet" href="../assets/compiled/css/app.css">
@@ -27,8 +29,9 @@
         <link href="{{ asset('assets/compiled/css/iconly.css') }}" rel="stylesheet">
     </head>
 
-    <body onload=getDataUniversitas()>
-        <script src="assets/static/js/initTheme.js"></script>
+    <body>
+        {{-- <script src="assets/static/js/initTheme.js"></script> --}}
+        <script src="../assets/static/js/initTheme.js"></script>
         <div id="app">
             <div id="sidebar">
                 <div class="sidebar-wrapper active">
@@ -299,77 +302,27 @@
                 @yield('container')
 
             </div>
-            <script src="../assets/static/js/components/dark.js"></script>
-            <script src="../assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-            <script src="../assets/compiled/js/app.js"></script>
-            <!-- Need: Apexcharts -->
-
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/collect.js/4.36.1/collect.min.js" integrity="sha512-aub0tRfsNTyfYpvUs0e9G/QRsIDgKmm4x59WRkHeWUc3CXbdiMwiMQ5tTSElshZu2LCq8piM/cbIsNwuuIR4gA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script>
-                window.onload = function () {
-                    // Render chart dengan data awal
-                    renderChart(JSON.parse(document.getElementById('initial-data').textContent));
-
-                    // Tombol untuk menerapkan filter
-                    document.getElementById('apply-filters').onclick = function () {
-                        var prodiId = document.getElementById('filter-year').value;
-                        var fakultasId = document.getElementById('filter-faculty').value;
-
-                        // Kirim request melalui AJAX
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('GET', '/dashboard?fakultas_id=' + fakultasId + '&prodi_id=' + prodiId, true);
-                        xhr.onload = function () {
-                            if (xhr.status === 200) {
-                                var data = JSON.parse(xhr.responseText);
-                                renderChart(data.publikasiData);
-                            }
-                        };
-                        xhr.send();
-                    };
-                };
-
-                function renderChart(data) {
-                    var ctx = document.getElementById('universitas').getContext('2d');
-                    if (window.myChart) {
-                        window.myChart.destroy();
-                    }
-                    window.myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: data.map(function (item) {
-                                return item.year;
-                            }),
-                            datasets: [{
-                                label: 'Jumlah Artikel',
-                                data: data.map(function (item) {
-                                    return item.total;
-                                }),
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                }
-
-            </script>
-
-
 
     </body>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="../assets/static/js/components/dark.js"></script>
+    <script src="../assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+
+    <script src="../assets/compiled/js/app.js"></script>
+
+
+
+    <script src="../assets/extensions/jquery/jquery.min.js"></script>
+    <script src="../assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="../assets/static/js/pages/datatables.js"></script>
 
     </html>
 @endauth
