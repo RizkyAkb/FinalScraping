@@ -14,7 +14,6 @@ class AdminController extends Controller
 {
     public function dashboard(Request $request)
     {
-        // Statistik
         $faculties = Fakultas::all();
         $prodies = Prodi::all();
         $fakultas = Fakultas::count();
@@ -22,25 +21,28 @@ class AdminController extends Controller
         $dosen = User::where('role', 'dosen')->count();
         $artikel = Publikasi::count();
 
-        // Filter dari request
         $fakultasId = $request->get('fakultas_id');
         $prodiId = $request->get('prodi_id');
 
-        // Query publikasi
-        $publikasiData = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
-            ->when($fakultasId, fn($query) => $query->where('users.fakultas_id', $fakultasId))
-            ->when($prodiId, fn($query) => $query->where('users.prodi_id', $prodiId))
-            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
+        $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
+            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total");
+
+        if ($fakultasId) {
+            $publikasiQuery->where('users.fakultas_id', $fakultasId);
+        }
+
+        if ($prodiId) {
+            $publikasiQuery->where('users.prodi_id', $prodiId);
+        }
+
+        $publikasiData = $publikasiQuery
             ->groupBy('year')
             ->orderBy('year', 'asc')
             ->get();
 
-        if ($request->ajax()) {
-            return response()->json(['publikasiData' => $publikasiData]);
-        }
-
         return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel', 'publikasiData', 'faculties', 'prodies'));
     }
+
 
     public function statistik()
     {

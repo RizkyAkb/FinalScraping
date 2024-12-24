@@ -17,8 +17,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
         <link rel="stylesheet" href="../assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
-        {{-- <link rel="stylesheet" href="assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css"> --}}
-
 
         <link rel="stylesheet" href="../assets/compiled/css/table-datatable-jquery.css">
         <link rel="stylesheet" href="../assets/compiled/css/app.css">
@@ -29,9 +27,8 @@
         <link href="{{ asset('assets/compiled/css/iconly.css') }}" rel="stylesheet">
     </head>
 
-    <body>
-        {{-- <script src="assets/static/js/initTheme.js"></script> --}}
-        <script src="../assets/static/js/initTheme.js"></script>
+    <body onload=getDataUniversitas()>
+        <script src="assets/static/js/initTheme.js"></script>
         <div id="app">
             <div id="sidebar">
                 <div class="sidebar-wrapper active">
@@ -312,26 +309,11 @@
             <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/collect.js/4.36.1/collect.min.js" integrity="sha512-aub0tRfsNTyfYpvUs0e9G/QRsIDgKmm4x59WRkHeWUc3CXbdiMwiMQ5tTSElshZu2LCq8piM/cbIsNwuuIR4gA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <script>
+
                 window.onload = function () {
-                    // Render chart dengan data awal
+                    // Render chart with initial data
                     const initialData = JSON.parse(document.getElementById('initial-data').textContent);
                     renderChart(initialData);
-
-                    // Tombol untuk menerapkan filter
-                    document.getElementById('apply-filters').addEventListener('click', function () {
-                        const prodiId = document.getElementById('filter-prodi').value;
-                        const fakultasId = document.getElementById('filter-faculty').value;
-
-                        fetch(`/dashboard?fakultas_id=${fakultasId}&prodi_id=${prodiId}`, {
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            renderChart(data.publikasiData);
-                        });
-                    });
                 };
 
                 function renderChart(data) {
@@ -361,27 +343,36 @@
                         }
                     });
                 }
+
+                function filterChart() {
+                    const fakultasId = document.getElementById('filter-faculty').value;
+                    const prodiId = document.getElementById('filter-prodi').value;
+
+                    fetch(`/admin/dashboard?fakultas_id=${fakultasId}&prodi_id=${prodiId}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            renderChart(data);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                }
+
             </script>
+
+
     </body>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script src="../assets/static/js/components/dark.js"></script>
-    <script src="../assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-
-    <script src="../assets/compiled/js/app.js"></script>
-
-
-
-    <script src="../assets/extensions/jquery/jquery.min.js"></script>
-    <script src="../assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="../assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="../assets/static/js/pages/datatables.js"></script>
 
     </html>
 @endauth
