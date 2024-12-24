@@ -20,21 +20,17 @@ class AdminController extends Controller
         $fakultas = Fakultas::count();
         $prodi = Prodi::count();
         $dosen = User::where('role', 'dosen')->count();
-        $artikel = Publikasi::count(); // Jumlah artikel jurnal
+        $artikel = Publikasi::count();
 
-        // Ambil parameter filter dari request
+        // Filter dari request
         $fakultasId = $request->get('fakultas_id');
         $prodiId = $request->get('prodi_id');
 
-        // Query publikasi dengan filter atau tanpa filter
+        // Query publikasi
         $publikasiData = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
-            ->when($fakultasId, function ($query, $fakultasId) {
-                return $query->where('users.fakultas_id', $fakultasId);
-            })
-            ->when($prodiId, function ($query, $prodiId) {
-                return $query->where('users.prodi_id', $prodiId);
-            })
-            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total") // SQLite strftime
+            ->when($fakultasId, fn($query) => $query->where('users.fakultas_id', $fakultasId))
+            ->when($prodiId, fn($query) => $query->where('users.prodi_id', $prodiId))
+            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
             ->groupBy('year')
             ->orderBy('year', 'asc')
             ->get();
@@ -45,6 +41,7 @@ class AdminController extends Controller
 
         return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel', 'publikasiData', 'faculties', 'prodies'));
     }
+
 
 
 

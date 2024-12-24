@@ -311,42 +311,38 @@
             <script>
                 window.onload = function () {
                     // Render chart dengan data awal
-                    renderChart(JSON.parse(document.getElementById('initial-data').textContent));
+                    const initialData = JSON.parse(document.getElementById('initial-data').textContent);
+                    renderChart(initialData);
 
                     // Tombol untuk menerapkan filter
-                    document.getElementById('apply-filters').onclick = function () {
-                        var prodiId = document.getElementById('filter-year').value;
-                        var fakultasId = document.getElementById('filter-faculty').value;
+                    document.getElementById('apply-filters').addEventListener('click', function () {
+                        const prodiId = document.getElementById('filter-prodi').value;
+                        const fakultasId = document.getElementById('filter-faculty').value;
 
-                        // Kirim request melalui AJAX
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('GET', '/dashboard?fakultas_id=' + fakultasId + '&prodi_id=' + prodiId, true);
-                        xhr.onload = function () {
-                            if (xhr.status === 200) {
-                                var data = JSON.parse(xhr.responseText);
-                                renderChart(data.publikasiData);
+                        fetch(`/dashboard?fakultas_id=${fakultasId}&prodi_id=${prodiId}`, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
                             }
-                        };
-                        xhr.send();
-                    };
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            renderChart(data.publikasiData);
+                        });
+                    });
                 };
 
                 function renderChart(data) {
-                    var ctx = document.getElementById('universitas').getContext('2d');
+                    const ctx = document.getElementById('universitas').getContext('2d');
                     if (window.myChart) {
                         window.myChart.destroy();
                     }
                     window.myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: data.map(function (item) {
-                                return item.year;
-                            }),
+                            labels: data.map(item => item.year),
                             datasets: [{
                                 label: 'Jumlah Artikel',
-                                data: data.map(function (item) {
-                                    return item.total;
-                                }),
+                                data: data.map(item => item.total),
                                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                 borderColor: 'rgba(75, 192, 192, 1)',
                                 borderWidth: 1
@@ -362,11 +358,7 @@
                         }
                     });
                 }
-
             </script>
-
-
-
     </body>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

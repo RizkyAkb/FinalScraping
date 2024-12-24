@@ -47,20 +47,21 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
                         <div class="d-flex gap-2">
-                        <select id="filter-year" class="form-select">
-                            <option value="">Semua Prodi</option>
-                            @foreach ($prodies as $prody)
-                                <option value="{{ $prody->id }}">{{ $prody->prodi_name }}</option>
-                            @endforeach
-                        </select>
+                            <select id="filter-prodi" class="form-select">
+                                <option value="">Semua Prodi</option>
+                                @foreach ($prodies as $prody)
+                                    <option value="{{ $prody->id }}">{{ $prody->prodi_name }}</option>
+                                @endforeach
+                            </select>
 
-                        <select id="filter-faculty" class="form-select">
-                            <option value="">Semua Fakultas</option>
-                            @foreach ($faculties as $faculty)
-                                <option value="{{ $faculty->id }}">{{ $faculty->fakultas_name }}</option>
-                            @endforeach
-                        </select>
-                        <button class="btn btn-primary" id="apply-filters">Terapkan</button>                        </div>
+                            <select id="filter-faculty" class="form-select">
+                                <option value="">Semua Fakultas</option>
+                                @foreach ($faculties as $faculty)
+                                    <option value="{{ $faculty->id }}">{{ $faculty->fakultas_name }}</option>
+                                @endforeach
+                            </select>
+                            <button class="btn btn-primary" id="apply-filters">Terapkan</button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <canvas id="universitas" width="400" height="200"></canvas>
@@ -68,23 +69,8 @@
                             @json($publikasiData)
                         </script>
                     </div>
-
-                </div>
-            </div>
-
-            <!-- Profile Card -->
-            <div class="col-12 col-lg-3">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <div class="avatar avatar-xl mb-3">
-                            <img src="../assets/compiled/jpg/1.jpg" alt="Admin Profile" class="rounded-circle">
-                        </div>
-                        <h5 class="font-bold">{{ Auth::user()->name }}</h5>
-                        <h6 class="text-muted mb-0">Admin Fakultas</h6>
-                    </div>
                 </div>
             </div>
         </section>
     </div>
-    
-    @endsection
+</div>
