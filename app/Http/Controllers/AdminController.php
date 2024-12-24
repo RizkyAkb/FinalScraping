@@ -42,17 +42,11 @@ class AdminController extends Controller
         return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel', 'publikasiData', 'faculties', 'prodies'));
     }
 
-
-
-
-
-
     public function statistik()
     {
-        $artikels = Publikasi::take(10)->get();
+        $artikels = Publikasi::take(1000)->get();
         return view('adminUniv.statistik', compact('artikels'));
     }
-
 
     public function listFakultas()
     {

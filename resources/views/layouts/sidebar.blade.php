@@ -17,6 +17,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
         <link rel="stylesheet" href="../assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+        {{-- <link rel="stylesheet" href="assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css"> --}}
+
 
         <link rel="stylesheet" href="../assets/compiled/css/table-datatable-jquery.css">
         <link rel="stylesheet" href="../assets/compiled/css/app.css">
@@ -27,8 +29,9 @@
         <link href="{{ asset('assets/compiled/css/iconly.css') }}" rel="stylesheet">
     </head>
 
-    <body onload=getDataUniversitas()>
-        <script src="assets/static/js/initTheme.js"></script>
+    <body>
+        {{-- <script src="assets/static/js/initTheme.js"></script> --}}
+        <script src="../assets/static/js/initTheme.js"></script>
         <div id="app">
             <div id="sidebar">
                 <div class="sidebar-wrapper active">
@@ -362,6 +365,23 @@
     </body>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="../assets/static/js/components/dark.js"></script>
+    <script src="../assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+
+    <script src="../assets/compiled/js/app.js"></script>
+
+
+
+    <script src="../assets/extensions/jquery/jquery.min.js"></script>
+    <script src="../assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="../assets/static/js/pages/datatables.js"></script>
 
     </html>
 @endauth
