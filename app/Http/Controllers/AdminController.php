@@ -40,6 +40,11 @@ class AdminController extends Controller
             ->orderBy('year', 'asc')
             ->get();
 
+        // Jika permintaan AJAX, kembalikan data dalam format JSON
+        if ($request->ajax()) {
+            return response()->json($publikasiData);
+        }
+
         return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel', 'publikasiData', 'faculties', 'prodies'));
     }
 
