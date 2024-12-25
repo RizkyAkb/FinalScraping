@@ -1,4 +1,4 @@
-@extends('layouts.sidebar')
+@extends('layouts.sidebarF')
 @section('container')
     <div id="main">
         <header class="mb-3">
