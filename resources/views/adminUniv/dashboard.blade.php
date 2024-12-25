@@ -33,8 +33,8 @@
                             <i class="{{ $stat['icon'] }} fs-3"></i>
                         </div>
                         <div>
-                            <h6 class="text-muted font-semibold">{{ $stat['title'] }}</h6>
-                            <h6 class="font-extrabold mb-0">{{ $stat['value'] }}</h6>
+                            <h6 class="text-muted font-semibold"></h6>
+                            <h6 class="font-extrabold mb-0"></h6>
                         </div>
                     </div>
                 </div>
@@ -61,8 +61,8 @@
                 </select>
                 <select id="filter-dosen" class="form-select">
                     <option value="">Semua Dosen</option>
-                    @foreach ($dosens as $dosen)
-                        <option value="{{ $dosen->id }}">{{ $dosen->name }}</option>
+                    @foreach ($dosen as $dosens)
+                        <option value="{{ $dosens->id }}">{{ $dosens->name }}</option>
                     @endforeach
                 </select>
                 <button class="btn btn-primary" id="apply-filters" onclick="filterChart()">Terapkan</button>

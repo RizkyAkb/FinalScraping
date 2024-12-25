@@ -353,18 +353,19 @@
                             'X-Requested-With': 'XMLHttpRequest'
                         }
                     })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            renderChart(data);
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Data yang diterima:', data); // Tambahkan log untuk memeriksa data
+                        renderChart(data);
+                    })
+                    .catch(error => {
+                        console.error(' Error:', error);
+                    });
                 }
             </script>
 
