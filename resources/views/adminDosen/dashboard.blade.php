@@ -82,19 +82,20 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
+               
                     <div class="card">
-                    <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
-    </div>
-    <div class="card-body">
-        <canvas id="universitas" width="400" height="200"></canvas>
-        <script id="initial-data" type="application/json">
-            @json($publikasiData)
-        </script>
-    </div>
-</div>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="universitas" width="400" height="200"></canvas>
+                            <script id="initial-data" type="application/json">
+                                @json($publikasiData)
+                            </script>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-12 col-lg-3">
                     <div class="card">

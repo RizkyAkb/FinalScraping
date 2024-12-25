@@ -20,18 +20,24 @@ class ProdiController extends Controller
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
-        // Ambil ID fakultas pengguna
+        // Ambil ID prodi pengguna
         $prodiId = $user->prodi_id;
+
+        // Hitung jumlah dosen dalam prodi
         $dosen = User::where('role', 'dosen')->where('prodi_id', $prodiId)->get();
         $dosenz = $dosen->count();
-        $artikel = Publikasi::count();
-        // Filter data publikasi
+
+        // Hitung jumlah artikel berdasarkan prodi pengguna
+        $artikel = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
+            ->where('users.prodi_id', $prodiId)
+            ->count();
+
+        // Filter data publikasi untuk grafik
         $dosenId = $request->get('dosen_id');
 
         $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
-        ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
-        ->where('users.prodi_id', $prodiId);
-
+            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
+            ->where('users.prodi_id', $prodiId);
 
         if ($dosenId) {
             $publikasiQuery->where('users.id', $dosenId);
@@ -47,8 +53,9 @@ class ProdiController extends Controller
             return response()->json($publikasiData);
         }
 
-        return view('adminProdi.dashboard', compact('dosen', 'publikasiData', 'artikel', 'dosenz'));   
+        return view('adminProdi.dashboard', compact('dosen', 'publikasiData', 'artikel', 'dosenz'));
     }
+
 
     public function listDosen()
     {

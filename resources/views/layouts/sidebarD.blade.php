@@ -277,39 +277,39 @@
             <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/collect.js/4.36.1/collect.min.js" integrity="sha512-aub0tRfsNTyfYpvUs0e9G/QRsIDgKmm4x59WRkHeWUc3CXbdiMwiMQ5tTSElshZu2LCq8piM/cbIsNwuuIR4gA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <script>
-    window.onload = function () {
-        const initialData = JSON.parse(document.getElementById('initial-data').textContent);
-        renderChart(initialData);
-    };
+                window.onload = function () {
+                    const initialData = JSON.parse(document.getElementById('initial-data').textContent);
+                    renderChart(initialData);
+                };
 
-    function renderChart(data) {
-        const ctx = document.getElementById('universitas').getContext('2d');
-        if (window.myChart) {
-            window.myChart.destroy();
-        }
-        window.myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: data.map(item => item.year), // Tahun publikasi
-                datasets: [{
-                    label: 'Jumlah Artikel',
-                    data: data.map(item => item.total), // Jumlah artikel
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
+                function renderChart(data) {
+                    const ctx = document.getElementById('universitas').getContext('2d');
+                    if (window.myChart) {
+                        window.myChart.destroy();
                     }
+                    window.myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.map(item => item.year), // Tahun publikasi
+                            datasets: [{
+                                label: 'Jumlah Artikel',
+                                data: data.map(item => item.total), // Jumlah artikel
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
                 }
-            }
-        });
-    }
-</script>
+            </script>
 
     </body>
 

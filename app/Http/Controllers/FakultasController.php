@@ -14,7 +14,7 @@ use App\Models\Publikasi;
 class FakultasController extends Controller
 {
     public function dashboard(Request $request)
-    {        
+    {
         $user = Auth::user(); // Mendapatkan pengguna yang login
         if (!$user || $user->role !== 'fakultas') {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
@@ -28,8 +28,13 @@ class FakultasController extends Controller
         $dosen = User::where('role', 'dosen')->where('fakultas_id', $fakultasId)->get();
         $prodi = $prodies->count();
         $dosenz = $dosen->count();
-        $artikel = Publikasi::count();
-        // Filter data publikasi
+
+        // Hitung jumlah artikel yang terkait dengan fakultas
+        $artikel = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
+            ->where('users.fakultas_id', $fakultasId)
+            ->count();
+
+        // Filter data publikasi untuk chart
         $prodiId = $request->get('prodi_id');
         $dosenId = $request->get('dosen_id');
 
@@ -57,6 +62,7 @@ class FakultasController extends Controller
 
         return view('adminFakultas.dashboard', compact('prodies', 'dosen', 'publikasiData', 'prodi', 'artikel', 'dosenz'));
     }
+
 
 
     
