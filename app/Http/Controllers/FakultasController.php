@@ -60,6 +60,12 @@ class FakultasController extends Controller
 
 
     
+    public function statistik()
+    {
+        $artikels = Publikasi::take(1000)->get();
+        return view('adminFakultas.statistik', compact('artikels'));
+    }
+
     public function listProdi()
     {
         $prodis = Prodi::where('fakultas_id', Auth::user()->fakultas_id)->with('fakultas')->get();

@@ -110,28 +110,43 @@ class ScrapingController extends Controller
         }
     }
 
-
-    public function scrapePublications()
+    public function scrapePublications($filter = [])
     {
-        $authors = DB::table('users')->select('scopus_id', 'scholar_id', 'id')->where('role', 'dosen')->get();
-        $api_key = '2f3be97cfe6cc239b0a9f325a660d9c1';
-        $base_url = 'https://api.elsevier.com/content/';
+        // Ambil data author sesuai filter
+        $authors = DB::table('users')
+            ->select('scopus_id', 'scholar_id', 'id')
+            ->where('role', 'dosen')
+            ->when(isset($filter['prodi_id']), function ($query) use ($filter) {
+                $query->where('prodi_id', $filter['prodi_id']);
+            })
+            ->when(isset($filter['fakultas_id']), function ($query) use ($filter) {
+                $query->where('fakultas_id', $filter['fakultas_id']);
+            })
+            ->get();
 
+        // Loop melalui setiap author dan scrape data
         foreach ($authors as $author) {
             if (!empty($author->scholar_id)) {
                 $this->scrapeScholar($author->scholar_id, $author->id);
-                sleep(2); // Delay to avoid quick scraping
+                sleep(2); // Delay untuk menghindari scraping terlalu cepat
             }
-        }
-
-        foreach ($authors as $author) {
             if (!empty($author->scopus_id)) {
                 $this->scrapeScopus($author->scopus_id, $author->id);
-                sleep(2); // Delay to avoid quick scraping
+                sleep(2); // Delay untuk menghindari scraping terlalu cepat
             }
         }
 
         return response()->json(['message' => 'Scraping publications complete!']);
+    }
+
+    public function scrapePublicationsByProdi($prodi_id)
+    {
+        $this->scrapePublications(['prodi_id' => $prodi_id]);
+    }
+
+    public function scrapePublicationsByFakultas($fakultas_id)
+    {
+        $this->scrapePublications(['fakultas_id' => $fakultas_id]);
     }
 
     // Get Scopus articles
