@@ -13,40 +13,45 @@ use App\Models\User;
 class AdminController extends Controller
 {
     public function dashboard(Request $request)
-    {
-        $faculties = Fakultas::all();
-        $prodies = Prodi::all();
-        $fakultas = Fakultas::count();
-        $prodi = Prodi::count();
-        $dosen = User::where('role', 'dosen')->count();
-        $artikel = Publikasi::count();
+{
+    $faculties = Fakultas::all();
+    $prodies = Prodi::all();
+    $fakultas = Fakultas::count();
+    $prodi = Prodi::count();
+    $dosens = User::where('role', 'dosen')->get(); // Ambil semua dosen
+    $artikel = Publikasi::count();
 
-        $fakultasId = $request->get('fakultas_id');
-        $prodiId = $request->get('prodi_id');
+    $fakultasId = $request->get('fakultas_id');
+    $prodiId = $request->get('prodi_id');
+    $dosenId = $request->get('dosen_id');
 
-        $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
-            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total");
+    $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
+        ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total");
 
-        if ($fakultasId) {
-            $publikasiQuery->where('users.fakultas_id', $fakultasId);
-        }
-
-        if ($prodiId) {
-            $publikasiQuery->where('users.prodi_id', $prodiId);
-        }
-
-        $publikasiData = $publikasiQuery
-            ->groupBy('year')
-            ->orderBy('year', 'asc')
-            ->get();
-
-        // Jika permintaan AJAX, kembalikan data dalam format JSON
-        if ($request->ajax()) {
-            return response()->json($publikasiData);
-        }
-
-        return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosen', 'artikel', 'publikasiData', 'faculties', 'prodies'));
+    if ($fakultasId) {
+        $publikasiQuery->where('users.fakultas_id', $fakultasId);
     }
+
+    if ($prodiId) {
+        $publikasiQuery->where('users.prodi_id', $prodiId);
+    }
+
+    if ($dosenId) {
+        $publikasiQuery->where('users.id', $dosenId); // Perbaiki filter untuk dosen
+    }
+
+    $publikasiData = $publikasiQuery
+        ->groupBy('year')
+        ->orderBy('year', 'asc')
+        ->get();
+
+    // Jika permintaan AJAX, kembalikan data dalam format JSON
+    if ($request->ajax()) {
+        return response()->json($publikasiData);
+    }
+
+    return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'dosens', 'artikel', 'publikasiData', 'faculties', 'prodies'));
+}
 
 
     public function statistik()
