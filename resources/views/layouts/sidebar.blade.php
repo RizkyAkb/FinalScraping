@@ -146,8 +146,8 @@
 
                                 <li class="sidebar-title">Pages</li>
 
-                                <li class="sidebar-item {{ Route::is('statistikAdminFakultas') ? 'active' : '' }}">
-                                    <a href="{{ route('fakultas.dashboard') }}" class="sidebar-link">
+                                <li class="sidebar-item {{ Route::is('fakultas.statistik') ? 'active' : '' }}">
+                                    <a href="{{ route('fakultas.statistik') }}" class="sidebar-link">
                                         <i class="bi bi-envelope-fill"></i>
                                         <span>Statistik</span>
                                     </a>

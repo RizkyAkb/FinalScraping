@@ -18,11 +18,14 @@ Failed to scrape Scholar for user ID: YQyGpHAAAAAJ
 Failed to scrape Scholar for user ID: MS8m5psAAAAJ
 Failed to scrape Scholar for user ID: H_x-5H0AAAAJ
 Failed to scrape Scholar for user ID: F4f8vD4AAAAJ
+<<<<<<< Updated upstream
 Failed to scrape Scholar for user ID: YQyGpHAAAAAJ
 Failed to scrape Scholar for user ID: MS8m5psAAAAJ
 Failed to scrape Scholar for user ID: H_x-5H0AAAAJ
 Failed to scrape Scholar for user ID: F4f8vD4AAAAJ
 Failed to scrape Scholar for user ID: YQyGpHAAAAAJ
 Failed to scrape Scholar for user ID: MS8m5psAAAAJ
+=======
+>>>>>>> Stashed changes
 Failed to scrape Scholar for user ID: H_x-5H0AAAAJ
 Failed to scrape Scholar for user ID: F4f8vD4AAAAJ

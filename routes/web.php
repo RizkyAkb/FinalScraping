@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
 
 //Admin Univ
 Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/scrape', [ScrapingController::class, 'scrapePublications'])->name('scrapeAll');
+
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/api/publikasi-data', [PublikasiController::class, 'getPublicationData']);    
     Route::get('/admin/statistik', [AdminController::class, 'statistik'])->name('admin.statistik');
@@ -60,7 +62,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 //Admin Fakultas
 Route::middleware(['auth', 'role:fakultas'])->group(function () {
+    Route::get('/scrape/fakultas/{id}', [ScrapingController::class, 'scrapePublicationsByFakultas'])->name('fakultas.scrape');
+    
     Route::get('/fakultas/dashboard', [FakultasController::class, 'dashboard'])->name('fakultas.dashboard');
+    Route::get('/fakultas/statistik', [FakultasController::class, 'statistik'])->name('fakultas.statistik');
     Route::get('/fakultas/prodi', [FakultasController::class, 'listProdi'])->name('fakultas.listProdi');
     Route::get('/fakultas/dosen', [FakultasController::class, 'listDosen'])->name('fakultas.listDosen');
     Route::get('/fakultas/admin-prodi', [FakultasController::class, 'listAdminProdi'])->name('fakultas.listAdminProdi');
@@ -68,6 +73,8 @@ Route::middleware(['auth', 'role:fakultas'])->group(function () {
 
 //Admin Prodi
 Route::middleware(['auth', 'role:prodi'])->group(function () {
+    Route::get('/scrape/prodi/{id}', [ScrapingController::class, 'scrapePublicationsByProdi']);
+
     Route::get('/prodi/dashboard', [ProdiController::class, 'dashboard'])->name('prodi.dashboard');
     Route::get('/prodi/dosen', [FakultasController::class, 'listDosen'])->name('prodi.listDosen');
 });
@@ -106,10 +113,5 @@ Route::middleware(['auth', 'role:admin,fakultas,prodi'])->group(function () {
     // DESTROY Admin Prodi
     Route::delete('/admin-prodi/{id}', [AdminController::class, 'destroyAdmProdi'])->name('admProdi.destroy');
 });
-
-Route::get('/scrape/scopus/{scopus_id}', [ScrapingController::class, 'scrapeScopus']);
-Route::get('/scrape/scholar/{scholar_id}', [ScrapingController::class, 'scrapeScholar']);
-
-Route::get('/scrape/tes', [ScrapingController::class, 'scrapePublications'])->name('scrapeAll');
 
 require __DIR__ . '/auth.php';

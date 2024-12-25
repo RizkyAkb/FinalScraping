@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Fakultas;
 use App\Models\Prodi;
 use App\Models\User;
+use App\Models\Publikasi;
 
 class FakultasController extends Controller
 {
@@ -20,6 +21,12 @@ class FakultasController extends Controller
         return view('adminFakultas.dashboard', compact('prodi','dosen','artikel'));
     }
     
+    public function statistik()
+    {
+        $artikels = Publikasi::take(1000)->get();
+        return view('adminFakultas.statistik', compact('artikels'));
+    }
+
     public function listProdi()
     {
         $prodis = Prodi::where('fakultas_id', Auth::user()->fakultas_id)->with('fakultas')->get();
