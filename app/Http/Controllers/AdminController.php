@@ -19,6 +19,7 @@ class AdminController extends Controller
         $fakultas = Fakultas::count();
         $prodi = Prodi::count();
         $dosen = User::where('role', 'dosen')->get(); // Ambil semua dosen
+        $dosenz = $dosen->count();
         $artikel = Publikasi::count();
 
         $fakultasId = $request->get('fakultas_id');
@@ -50,7 +51,7 @@ class AdminController extends Controller
             return response()->json($publikasiData);
         }
 
-        return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'artikel', 'publikasiData', 'faculties', 'prodies', 'dosen'));
+        return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'artikel', 'publikasiData', 'faculties', 'prodies', 'dosen', 'dosenz'));
     }
 
 

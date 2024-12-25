@@ -20,7 +20,7 @@
             $stats = [
                 ['title' => 'Jumlah Fakultas', 'icon' => 'iconly-boldProfile', 'value' => $fakultas, 'color' => 'blue'],
                 ['title' => 'Jumlah Program Studi', 'icon' => 'iconly-boldProfile', 'value' => $prodi, 'color' => 'blue'],
-                ['title' => 'Jumlah Dosen', 'icon' => 'iconly-boldAdd-User ', 'value' => $dosen, 'color' => 'green'],
+                ['title' => 'Jumlah Dosen', 'icon' => 'iconly-boldAdd-User ', 'value' => $dosenz, 'color' => 'green'],
                 ['title' => 'Jumlah Artikel Jurnal', 'icon' => 'iconly-boldShow', 'value' => $artikel, 'color' => 'purple'],
             ];
         @endphp
@@ -33,8 +33,8 @@
                             <i class="{{ $stat['icon'] }} fs-3"></i>
                         </div>
                         <div>
-                            <h6 class="text-muted font-semibold"></h6>
-                            <h6 class="font-extrabold mb-0"></h6>
+                            <h6 class="text-muted font-semibold">{{ $stat['title'] }}</h6>
+                            <h6 class="font-extrabold mb-0">{{ $stat['value'] }}</h6>
                         </div>
                     </div>
                 </div>

@@ -9,16 +9,56 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Fakultas;
 use App\Models\Prodi;
 use App\Models\User;
+use App\Models\Publikasi;
 
 class FakultasController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {        
-        $prodi = Prodi::count();
-        $dosen = User::where('role', 'dosen')->count();
-        $artikel = Fakultas::count();
-        return view('adminFakultas.dashboard', compact('prodi','dosen','artikel'));
+        $user = Auth::user(); // Mendapatkan pengguna yang login
+        if (!$user || $user->role !== 'fakultas') {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
+
+        // Ambil ID fakultas pengguna
+        $fakultasId = $user->fakultas_id;
+
+        // Filter data prodi dan dosen berdasarkan fakultas pengguna
+        $prodies = Prodi::where('fakultas_id', $fakultasId)->get();
+        $dosen = User::where('role', 'dosen')->where('fakultas_id', $fakultasId)->get();
+        $prodi = $prodies->count();
+        $dosenz = $dosen->count();
+        $artikel = Publikasi::count();
+        // Filter data publikasi
+        $prodiId = $request->get('prodi_id');
+        $dosenId = $request->get('dosen_id');
+
+        $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
+            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
+            ->where('users.fakultas_id', $fakultasId);
+
+        if ($prodiId) {
+            $publikasiQuery->where('users.prodi_id', $prodiId);
+        }
+
+        if ($dosenId) {
+            $publikasiQuery->where('users.id', $dosenId);
+        }
+
+        $publikasiData = $publikasiQuery
+            ->groupBy('year')
+            ->orderBy('year', 'asc')
+            ->get();
+
+        // Jika permintaan AJAX, kembalikan data dalam format JSON
+        if ($request->ajax()) {
+            return response()->json($publikasiData);
+        }
+
+        return view('adminFakultas.dashboard', compact('prodies', 'dosen', 'publikasiData', 'prodi', 'artikel', 'dosenz'));
     }
+
+
     
     public function listProdi()
     {
