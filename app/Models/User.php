@@ -64,7 +64,7 @@ class User extends Authenticatable
 
     public function publikasi()
     {
-        return $this->hasMany(Publikasi::class, 'author_id');
+        return $this->hasMany(Publikasi::class, 'author_id')->chaperone();
     }
     public function roles()
     {
