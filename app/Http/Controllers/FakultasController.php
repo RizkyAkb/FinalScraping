@@ -28,6 +28,7 @@ class FakultasController extends Controller
         $dosen = User::where('role', 'dosen')->where('fakultas_id', $fakultasId)->get();
         $prodi = $prodies->count();
         $dosenz = $dosen->count();
+        $source = $request->get('source');
 
         // Hitung jumlah artikel yang terkait dengan fakultas
         $artikel = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
@@ -39,7 +40,13 @@ class FakultasController extends Controller
         $dosenId = $request->get('dosen_id');
 
         $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
-            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
+            ->selectRaw("
+        CASE 
+            WHEN LENGTH(publication_date) = 4 THEN publication_date 
+            WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date) 
+            ELSE NULL 
+        END as year,
+        COUNT(*) as total")
             ->where('users.fakultas_id', $fakultasId);
 
         if ($prodiId) {
@@ -48,6 +55,10 @@ class FakultasController extends Controller
 
         if ($dosenId) {
             $publikasiQuery->where('users.id', $dosenId);
+        }
+
+        if ($source) {
+            $publikasiQuery->where('publikasis.source', $source);
         }
 
         $publikasiData = $publikasiQuery
@@ -65,7 +76,7 @@ class FakultasController extends Controller
 
 
 
-    
+
     public function statistik()
     {
         $artikels = Publikasi::take(1000)->get();
@@ -93,7 +104,7 @@ class FakultasController extends Controller
     // View tambah Fakultas (View-Create)
     public function create()
     {
-        $fakultas = Fakultas::all();        
+        $fakultas = Fakultas::all();
         return view('fakultas.add', compact('fakultas'));
     }
 
@@ -101,13 +112,13 @@ class FakultasController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'fakultas_name' => 'required|string|max:255',  
-            'year_founded' => 'required|integer',            
+            'fakultas_name' => 'required|string|max:255',
+            'year_founded' => 'required|integer',
         ]);
 
         Fakultas::create([
-            'fakultas_name' => $request->fakultas_name, 
-            'year_founded' => $request->year_founded,           
+            'fakultas_name' => $request->fakultas_name,
+            'year_founded' => $request->year_founded,
         ]);
         return redirect()->route('admin.listFakultas')->with('success', 'Data berhasil ditambahkan');
     }
@@ -115,7 +126,7 @@ class FakultasController extends Controller
     // View tambah Fakultas (View-Create)
     public function edit($id)
     {
-        $fakultas = Fakultas::findOrFail($id);        
+        $fakultas = Fakultas::findOrFail($id);
         return view('fakultas.edit', compact('fakultas'));
     }
 
@@ -124,12 +135,12 @@ class FakultasController extends Controller
     {
         // Validasi data input
         $validatedData = $request->validate([
-            'fakultas_name' => 'required|string|max:255', 
-            'year_founded' => 'required|integer',           
+            'fakultas_name' => 'required|string|max:255',
+            'year_founded' => 'required|integer',
         ]);
 
-        $fakultas = Fakultas::findOrFail($id); 
-        $fakultas->update($validatedData); 
+        $fakultas = Fakultas::findOrFail($id);
+        $fakultas->update($validatedData);
         // Redirect ke halaman daftar dosen dengan pesan sukses
         return redirect()->route('fakultas.edit', $id)->with('success', 'Data berhasil diperbarui!');
     }

@@ -13,19 +13,31 @@ class DosenController extends Controller
     public function dashboard(Request $request)
     {
         $user = Auth::user(); // Mendapatkan pengguna yang login
+        
         if (!$user || $user->role !== 'dosen') {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
+        $dosenId = $request->get('dosen_id');
+        $source = $request->get('source');
+        $artikel = Publikasi::where('author_id', $user->id)->count();
 
         // Query publikasi berdasarkan author_id pengguna yang login
         $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
-            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
+            ->selectRaw("
+        CASE 
+            WHEN LENGTH(publication_date) = 4 THEN publication_date 
+            WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date) 
+            ELSE NULL 
+        END as year,
+        COUNT(*) as total")
             ->where('users.id', $user->id); // Filter berdasarkan id pengguna yang login
 
         // Filter tambahan jika ada parameter dosen_id
-        $dosenId = $request->get('dosen_id');
         if ($dosenId) {
             $publikasiQuery->where('users.id', $dosenId);
+        }
+        if ($source) {
+            $publikasiQuery->where('publikasis.source', $source);
         }
 
         $publikasiData = $publikasiQuery
@@ -39,13 +51,7 @@ class DosenController extends Controller
         }
 
         // Hitung jumlah artikel oleh dosen yang login
-        $artikel = Publikasi::where('author_id', $user->id)->count();
 
         return view('adminDosen.dashboard', compact('publikasiData', 'artikel'));
     }
-
-
-
-
-    
 }

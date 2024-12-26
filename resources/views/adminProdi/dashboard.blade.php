@@ -94,6 +94,11 @@
                                 <option value="{{ $dosens->id }}">{{ $dosens->name }}</option>
                                 @endforeach
                             </select>
+                            <select id="filter-source" class="form-select">
+                                <option value="">Semua Source</option>
+                                <option value="scopus">Scopus</option>
+                                <option value="scholar">Scholar</option>
+                            </select>
 
                             <button class="btn btn-primary" id="apply-filters" onclick="filterChart()">Terapkan</button>
                         </div>
@@ -169,9 +174,10 @@
 
     function filterChart() {
         const dosenId = document.getElementById('filter-dosen').value;
+        const source = document.getElementById('filter-source').value;
 
         // Kirim permintaan AJAX
-        fetch(`/prodi/dashboard?dosen_id=${dosenId}`, {
+        fetch(`/prodi/dashboard?dosen_id=${dosenId}&source=${source}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
