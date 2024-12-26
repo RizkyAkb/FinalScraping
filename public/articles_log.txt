@@ -35779,6 +35779,7 @@ Array
     [0] => Array
         (
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [title] => Pendidikan karakter: membangun peradaban bangsa
             [author_name] => MF Hidayatullah, M Rohmadi
             [journal_name] => Yuma Pustaka, 2010
@@ -37017,10 +37018,13 @@ Array
 
     [2] => Array
         (
+=======
+>>>>>>> Stashed changes
             [title] => Critical thinking skills profile of high school students in learning chemistry
             [author_name] => B Utami, S Saputro, A Ashadi, M Masykuri, S Widoretno
             [journal_name] => International Journal of Science and Applied Science: Conference Series 1 (2 …, 2017
             [publication_date] => 2017
+<<<<<<< Updated upstream
             [citations] => 110
             [doi] => /citations?view_op=view_citation&hl=id&user=QN7qX9UAAAAJ&citation_for_view=QN7qX9UAAAAJ:olpn-zPbct0C
         )
@@ -38226,6 +38230,9 @@ Array
 =======
             [citations] => 109
 >>>>>>> Stashed changes
+=======
+            [citations] => 109
+>>>>>>> Stashed changes
             [doi] => /citations?view_op=view_citation&hl=id&user=2IBZW1AAAAAJ&citation_for_view=2IBZW1AAAAAJ:ZHo1McVdvXMC
         )
 
@@ -38292,6 +38299,7 @@ Array
     [7] => Array
         (
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [title] => Pengembangan media pembelajaran ensiklopedia hukum-hukum dasar kimia untuk pembelajaran kimia kelas X SMAN 1 Boyolali dan SMAN 1 Teras
             [author_name] => A Hidayat, S Saputro, JS Sukardjo
             [journal_name] => Jurnal Pendidikan Kimia (JPK) 4 (2), 47-56, 2015
@@ -38304,6 +38312,8 @@ Array
         (
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
             [title] => Higher order thinking skills in the 21st century: Critical thinking
             [author_name] => M Miterianifa, A Ashadi, S Saputro, S Suciati
             [journal_name] => Proceedings of the 1st International Conference on Social Science …, 2021
@@ -38313,7 +38323,10 @@ Array
         )
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
     [8] => Array
         (
             [title] => Pengembangan media pembelajaran ensiklopedia hukum-hukum dasar kimia untuk pembelajaran kimia kelas X SMAN 1 Boyolali dan SMAN 1 Teras
@@ -38324,6 +38337,9 @@ Array
             [doi] => /citations?view_op=view_citation&hl=id&user=2IBZW1AAAAAJ&citation_for_view=2IBZW1AAAAAJ:ZeXyd9-uunAC
         )
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     [9] => Array
         (
@@ -38372,7 +38388,11 @@ Array
             [journal_name] => INKUIRI: Jurnal Pendidikan IPA 3 (01), 2014
             [publication_date] => 2014
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 46
+=======
+            [citations] => 48
+>>>>>>> Stashed changes
 =======
             [citations] => 48
 >>>>>>> Stashed changes
@@ -38449,7 +38469,11 @@ Array
             [journal_name] => Florea: Jurnal Biologi dan Pembelajarannya 2 (1), 2015
             [publication_date] => 2015
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 557
+=======
+            [citations] => 555
+>>>>>>> Stashed changes
 =======
             [citations] => 555
 >>>>>>> Stashed changes
@@ -38473,7 +38497,11 @@ Array
             [journal_name] => UNS (Sebelas Maret University), 2012
             [publication_date] => 2012
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 94
+=======
+            [citations] => 93
+>>>>>>> Stashed changes
 =======
             [citations] => 93
 >>>>>>> Stashed changes
@@ -38863,7 +38891,11 @@ Array
             [journal_name] => Journal of Asia Business Studies 10 (3), 230-252, 2016
             [publication_date] => 2016
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 209
+=======
+            [citations] => 208
+>>>>>>> Stashed changes
 =======
             [citations] => 208
 >>>>>>> Stashed changes
@@ -38957,7 +38989,11 @@ Array
             [journal_name] => Research in International Business and Finance 56, 101352, 2021
             [publication_date] => 2021
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 69
+=======
+            [citations] => 68
+>>>>>>> Stashed changes
 =======
             [citations] => 68
 >>>>>>> Stashed changes
@@ -38971,7 +39007,11 @@ Array
             [journal_name] => Economic Modelling 103, 105598, 2021
             [publication_date] => 2021
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 66
+=======
+            [citations] => 65
+>>>>>>> Stashed changes
 =======
             [citations] => 65
 >>>>>>> Stashed changes
@@ -39071,6 +39111,7 @@ Array
 )
 Array
 (
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     [0] => Array
         (
@@ -40298,6 +40339,8 @@ Array
 (
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 )
 Array
 (
@@ -40311,7 +40354,11 @@ Array
             [journal_name] => The lancet 396 (10258), 1204-1222, 2020
             [publication_date] => 2020
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 9328
+=======
+            [citations] => 9312
+>>>>>>> Stashed changes
 =======
             [citations] => 9312
 >>>>>>> Stashed changes
@@ -40325,7 +40372,11 @@ Array
             [journal_name] => The lancet 396 (10258), 1223-1249, 2020
             [publication_date] => 2020
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 7006
+=======
+            [citations] => 7000
+>>>>>>> Stashed changes
 =======
             [citations] => 7000
 >>>>>>> Stashed changes
@@ -40349,7 +40400,11 @@ Array
             [journal_name] => The Lancet 398 (10303), 870-905, 2021
             [publication_date] => 2021
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 388
+=======
+            [citations] => 389
+>>>>>>> Stashed changes
 =======
             [citations] => 389
 >>>>>>> Stashed changes
@@ -40363,7 +40418,11 @@ Array
             [journal_name] => The Lancet 403 (10440), 2100-2132, 2024
             [publication_date] => 2024
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 292
+=======
+            [citations] => 290
+>>>>>>> Stashed changes
             [doi] => /citations?view_op=view_citation&hl=id&user=uTQxsToAAAAJ&citation_for_view=uTQxsToAAAAJ:2KloaMYe4IUC
         )
 
@@ -40373,7 +40432,11 @@ Array
             [author_name] => M Brauer, GA Roth, AY Aravkin, P Zheng, KH Abate, YH Abate, C Abbafati, ...
             [journal_name] => The Lancet 403 (10440), 2162-2203, 2024
             [publication_date] => 2024
+<<<<<<< Updated upstream
             [citations] => 269
+=======
+            [citations] => 267
+>>>>>>> Stashed changes
             [doi] => /citations?view_op=view_citation&hl=id&user=uTQxsToAAAAJ&citation_for_view=uTQxsToAAAAJ:ipzZ9siozwsC
         )
 
@@ -40383,7 +40446,11 @@ Array
             [author_name] => AE Schumacher, HH Kyu, A Aali, C Abbafati, J Abbas, ...
             [journal_name] => The Lancet 403 (10440), 1989-2056, 2024
             [publication_date] => 2024
+<<<<<<< Updated upstream
             [citations] => 208
+=======
+            [citations] => 209
+>>>>>>> Stashed changes
             [doi] => /citations?view_op=view_citation&hl=id&user=uTQxsToAAAAJ&citation_for_view=uTQxsToAAAAJ:7T2F9Uy0os0C
         )
 
@@ -40413,7 +40480,11 @@ Array
             [author_name] => SE Vollset, HS Ababneh, YH Abate, C Abbafati, R Abbasgholizadeh, ...
             [journal_name] => The Lancet 403 (10440), 2204-2256, 2024
             [publication_date] => 2024
+<<<<<<< Updated upstream
             [citations] => 115
+=======
+            [citations] => 114
+>>>>>>> Stashed changes
             [doi] => /citations?view_op=view_citation&hl=id&user=uTQxsToAAAAJ&citation_for_view=uTQxsToAAAAJ:EkHepimYqZsC
         )
 
@@ -40433,6 +40504,7 @@ Array
             [author_name] => 
             [journal_name] => Nature 589 (7842), 415-419, 2021
             [publication_date] => 2021
+<<<<<<< Updated upstream
             [citations] => 102
             [doi] => /citations?view_op=view_citation&hl=id&user=uTQxsToAAAAJ&citation_for_view=uTQxsToAAAAJ:vV6vV6tmYwMC
         )
@@ -49397,6 +49469,9 @@ Array
 =======
             [citations] => 103
 >>>>>>> Stashed changes
+=======
+            [citations] => 103
+>>>>>>> Stashed changes
             [doi] => /citations?view_op=view_citation&hl=id&user=uTQxsToAAAAJ&citation_for_view=uTQxsToAAAAJ:vV6vV6tmYwMC
         )
 
@@ -49407,7 +49482,11 @@ Array
             [journal_name] => The Lancet Global Health 10 (11), e1632-e1645, 2022
             [publication_date] => 2022
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 89
+=======
+            [citations] => 90
+>>>>>>> Stashed changes
 =======
             [citations] => 90
 >>>>>>> Stashed changes
@@ -49421,7 +49500,11 @@ Array
             [journal_name] => The Lancet 403 (10440), 2057-2099, 2024
             [publication_date] => 2024
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 60
+=======
+            [citations] => 54
+>>>>>>> Stashed changes
 =======
             [citations] => 54
 >>>>>>> Stashed changes
@@ -49435,7 +49518,11 @@ Array
             [journal_name] => The Lancet Global Health 8 (8), e1038-e1060, 2020
             [publication_date] => 2020
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 50
+=======
+            [citations] => 51
+>>>>>>> Stashed changes
 =======
             [citations] => 51
 >>>>>>> Stashed changes
@@ -49449,7 +49536,11 @@ Array
             [journal_name] => IOP conference series: Materials science and engineering 633 (1), 012052, 2019
             [publication_date] => 2019
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 42
+=======
+            [citations] => 41
+>>>>>>> Stashed changes
 =======
             [citations] => 41
 >>>>>>> Stashed changes
@@ -49616,7 +49707,11 @@ Array
             [journal_name] => Jurnal Pendidikan Karakter 8 (2), 2017
             [publication_date] => 2017
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 62
+=======
+            [citations] => 61
+>>>>>>> Stashed changes
 =======
             [citations] => 61
 >>>>>>> Stashed changes
@@ -49723,7 +49818,11 @@ Array
             [journal_name] => Suhuf 30 (1), 35-56, 2018
             [publication_date] => 2018
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 106
+=======
+            [citations] => 105
+>>>>>>> Stashed changes
 =======
             [citations] => 105
 >>>>>>> Stashed changes
@@ -49817,7 +49916,11 @@ Array
             [journal_name] => Kalimah: Jurnal Studi Agama Dan Pemikiran Islam 11 (2), 238-250, 2013
             [publication_date] => 2013
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 46
+=======
+            [citations] => 47
+>>>>>>> Stashed changes
 =======
             [citations] => 47
 >>>>>>> Stashed changes
@@ -49924,7 +50027,11 @@ Array
             [journal_name] => CV WIDINA MEDIA UTAMA, 2021
             [publication_date] => 2021
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 284
+=======
+            [citations] => 283
+>>>>>>> Stashed changes
 =======
             [citations] => 283
 >>>>>>> Stashed changes
@@ -49978,7 +50085,11 @@ Array
             [journal_name] => CV WIDINA MEDIA UTAMA, 2022
             [publication_date] => 2022
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             [citations] => 140
+=======
+            [citations] => 139
+>>>>>>> Stashed changes
 =======
             [citations] => 139
 >>>>>>> Stashed changes
@@ -50126,6 +50237,7 @@ Array
         )
 
 )
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 Array
 (
@@ -53781,5 +53893,7 @@ Array
         )
 
 )
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
