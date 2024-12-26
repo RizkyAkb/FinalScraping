@@ -60,7 +60,6 @@ class ScrapingController extends Controller
         }
     }
 
-
     // Scraping Google Scholar
     public function scrapeScholar($scholar_id, $author_id)
     {
@@ -116,6 +115,9 @@ class ScrapingController extends Controller
         $authors = DB::table('users')
             ->select('scopus_id', 'scholar_id', 'id')
             ->where('role', 'dosen')
+            ->when(isset($filter['dosen_id']), function ($query) use ($filter) {
+                $query->where('id', $filter['dosen_id']);
+            })
             ->when(isset($filter['prodi_id']), function ($query) use ($filter) {
                 $query->where('prodi_id', $filter['prodi_id']);
             })
@@ -147,6 +149,11 @@ class ScrapingController extends Controller
     public function scrapePublicationsByFakultas($fakultas_id)
     {
         $this->scrapePublications(['fakultas_id' => $fakultas_id]);
+    }
+
+    public function scrapePublicationsByDosen($dosen_id)
+    {
+        $this->scrapePublications(['id' => $dosen_id]);
     }
 
     // Get Scopus articles

@@ -197,8 +197,8 @@
 
                                 <li class="sidebar-title">Pages</li>
 
-                                <li class="sidebar-item {{ Route::is('statistikAdminFakultas') ? 'active' : '' }}">
-                                    <a href="{{ route('prodi.dashboard') }}" class="sidebar-link">
+                                <li class="sidebar-item {{ Route::is('prodi.statistik') ? 'active' : '' }}">
+                                    <a href="{{ route('prodi.statistik') }}" class="sidebar-link">
                                         <i class="bi bi-envelope-fill"></i>
                                         <span>Statistik</span>
                                     </a>
@@ -239,8 +239,8 @@
 
                                 <li class="sidebar-title">Pages</li>
 
-                                <li class="sidebar-item {{ Route::is('statistikAdminFakultas') ? 'active' : '' }}">
-                                    <a href="{{ route('dosen.dashboard') }}" class="sidebar-link">
+                                <li class="sidebar-item {{ Route::is('dosen.statistik') ? 'active' : '' }}">
+                                    <a href="{{ route('dosen.statistik') }}" class="sidebar-link">
                                         <i class="bi bi-envelope-fill"></i>
                                         <span>Statistik</span>
                                     </a>

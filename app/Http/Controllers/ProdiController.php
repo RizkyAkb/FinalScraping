@@ -67,6 +67,11 @@ class ProdiController extends Controller
         return view('adminProdi.dashboard', compact('dosen', 'publikasiData', 'artikel', 'dosenz'));
     }
 
+    public function statistik()
+    {
+        $artikels = Publikasi::take(1000)->get();
+        return view('adminProdi.statistik', compact('artikels'));
+    }
 
     public function listDosen()
     {

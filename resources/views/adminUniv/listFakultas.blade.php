@@ -21,8 +21,7 @@
                                     <tr>
                                         <th>Nama</th>
                                         <th>Tahun Berdiri</th>
-                                        <th>Jumlah Dosen</th>
-                                        <th>Kode</th>
+                                        <th>Jumlah Dosen</th>                                        
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -30,9 +29,8 @@
                                     @forelse ($faculties as $fakultas)
                                         <tr>
                                             <td>{{ $fakultas->fakultas_name }}</td>
-                                            <td>'N/A'</td>
-                                            <td>{{ $fakultas->user->where('role', 'dosen')->count() }}</td>
-                                            <td>'N/A'</td>
+                                            <td>{{ $fakultas->year_founded }}</td>
+                                            <td>{{ $fakultas->user->where('role', 'dosen')->count() }}</td>                                            
                                             <td>
                                                 <div class="d-flex flex-column">
                                                     <a href="{{ route('fakultas.edit', $fakultas->id) }}"

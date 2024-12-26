@@ -54,4 +54,13 @@ class DosenController extends Controller
 
         return view('adminDosen.dashboard', compact('publikasiData', 'artikel'));
     }
+<<<<<<< HEAD
+=======
+
+    public function statistik()
+    {
+        $artikels = Publikasi::take(1000)->get();
+        return view('adminDosen.statistik', compact('artikels'));
+    }    
+>>>>>>> 4d586458dac06ef3a2e3f146e1cc0cc755162c37
 }

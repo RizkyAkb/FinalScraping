@@ -73,7 +73,7 @@ Route::middleware(['auth', 'role:fakultas'])->group(function () {
 
 //Admin Prodi
 Route::middleware(['auth', 'role:prodi'])->group(function () {
-    Route::get('/scrape/prodi/{id}', [ScrapingController::class, 'scrapePublicationsByProdi']);
+    Route::get('/scrape/prodi/{id}', [ScrapingController::class, 'scrapePublicationsByProdi'])->name('prodi.scrape');
 
     Route::get('/prodi/dashboard', [ProdiController::class, 'dashboard'])->name('prodi.dashboard');
     Route::get('/prodi/dosen', [FakultasController::class, 'listDosen'])->name('prodi.listDosen');
@@ -81,7 +81,10 @@ Route::middleware(['auth', 'role:prodi'])->group(function () {
 
 //Admin Dosen
 Route::middleware(['auth', 'role:dosen'])->group(function () {
+    Route::get('/scrape/dosen/{id}', [ScrapingController::class, 'scrapePublicationsByDosen'])->name('dosen.scrape');
+
     Route::get('/dosen/dashboard', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
+    Route::get('/dosen/statistik', [DosenController::class, 'statistik'])->name('dosen.statistik');
 
 });
 
