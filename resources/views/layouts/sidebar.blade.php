@@ -244,30 +244,7 @@
                                         <i class="bi bi-envelope-fill"></i>
                                         <span>Statistik</span>
                                     </a>
-                                </li>
-
-                                <li class="sidebar-item {{ Route::is('dosen.listDosen') ? 'active' : '' }}">
-                                    <a href="{{ route('dosen.listDosen') }}" class="sidebar-link">
-                                        <i class="bi bi-basket-fill"></i>
-                                        <span>Dosen</span>
-                                    </a>
-                                </li>
-
-                                <li
-                                    class="sidebar-item has-sub {{ Route::is('dosenAdminFakultas', 'adminProdiFakultas') ? 'active' : '' }}">
-                                    <a href="#" class="sidebar-link">
-                                        <i class="bi bi-person-circle"></i>
-                                        <span>Admin</span>
-                                    </a>
-                                    <ul class="submenu">
-                                        <li class="submenu-item {{ Route::is('dosenAdminFakultas') ? 'active' : '' }}">
-                                            <a href="{{ route('dosen.dashboard') }}" class="submenu-link">Dosen</a>
-                                        </li>
-                                        <li class="submenu-item {{ Route::is('adminProdiFakultas') ? 'active' : '' }}">
-                                            <a href="{{ route('dosen.dashboard') }}" class="submenu-link">Admin Prodi</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                                </li>                                
                             @endif
                             <li class="sidebar-item  has-sub">
                                 <a href="#" class='sidebar-link'>
