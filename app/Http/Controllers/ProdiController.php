@@ -14,8 +14,10 @@ use App\Models\Publikasi;
 class ProdiController extends Controller
 {
     public function dashboard(Request $request)
-    {        
+    {
         $user = Auth::user(); // Mendapatkan pengguna yang login
+        $source = $request->get('source');
+
         if (!$user || $user->role !== 'prodi') {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
@@ -36,11 +38,20 @@ class ProdiController extends Controller
         $dosenId = $request->get('dosen_id');
 
         $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
-            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
+            ->selectRaw("
+        CASE 
+            WHEN LENGTH(publication_date) = 4 THEN publication_date 
+            WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date) 
+            ELSE NULL 
+        END as year,
+        COUNT(*) as total")
             ->where('users.prodi_id', $prodiId);
 
         if ($dosenId) {
             $publikasiQuery->where('users.id', $dosenId);
+        }
+        if ($source) {
+            $publikasiQuery->where('publikasis.source', $source);
         }
 
         $publikasiData = $publikasiQuery
@@ -71,9 +82,9 @@ class ProdiController extends Controller
     // View tambah Prodi (View-Create)
     public function create()
     {
-        $prodi = Prodi::all();     
-        $fakultas = Fakultas::all();   
-        return view('prodi.add', compact('prodi','fakultas'));
+        $prodi = Prodi::all();
+        $fakultas = Fakultas::all();
+        return view('prodi.add', compact('prodi', 'fakultas'));
     }
 
     // Menambah Prodi ke database (Create)
@@ -81,16 +92,16 @@ class ProdiController extends Controller
     {
         $request->validate([
             'fakultas_id' => 'required|string',
-            'prodi_name' => 'required|string|max:255',            
+            'prodi_name' => 'required|string|max:255',
             'year_founded' => 'required|integer',
         ]);
 
         Prodi::create([
             'fakultas_id' => $request->fakultas_id,
-            'prodi_name' => $request->prodi_name,    
-            'year_founded' => $request->year_founded,        
+            'prodi_name' => $request->prodi_name,
+            'year_founded' => $request->year_founded,
         ]);
-        
+
         if (auth()->user()->role === 'admin') {
             return redirect()->route('admin.listProdi')->with('success', 'Data berhasil dihapus');
         } elseif (auth()->user()->role === 'fakultas') {
@@ -102,8 +113,8 @@ class ProdiController extends Controller
     public function edit($id)
     {
         $prodi = Prodi::findOrFail($id);
-        $fakultas = Fakultas::all();        
-        return view('prodi.edit', compact('prodi','fakultas'));
+        $fakultas = Fakultas::all();
+        return view('prodi.edit', compact('prodi', 'fakultas'));
     }
 
     // Mengupdate Prodi dari database (Update)
@@ -112,12 +123,12 @@ class ProdiController extends Controller
         // Validasi data input
         $validatedData = $request->validate([
             'fakultas_id' => 'required|string',
-            'prodi_name' => 'required|string|max:255',            
+            'prodi_name' => 'required|string|max:255',
             'year_founded' => 'required|integer',
         ]);
 
-        $prodi = Prodi::findOrFail($id); 
-        $prodi->update($validatedData); 
+        $prodi = Prodi::findOrFail($id);
+        $prodi->update($validatedData);
         // Redirect ke halaman daftar dosen dengan pesan sukses
         return redirect()->route('prodi.edit', $id)->with('success', 'Data berhasil diperbarui!');
     }

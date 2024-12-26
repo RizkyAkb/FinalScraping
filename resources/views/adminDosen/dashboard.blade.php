@@ -88,6 +88,15 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
+                        <div class="d-flex gap-2">
+                            <select id="filter-source" class="form-select">
+                                <option value="">Semua Source</option>
+                                <option value="scopus">Scopus</option>
+                                <option value="scholar">Scholar</option>
+                            </select>
+
+                            <button class="btn btn-primary" id="apply-filters" onclick="filterChart()">Terapkan</button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <canvas id="universitas" width="400" height="200"></canvas>
@@ -155,6 +164,29 @@
                 }
             }
         });
+    }
+
+    function filterChart() {
+        const source = document.getElementById('filter-source').value;
+
+        fetch(`/dosen/dashboard?source=${source}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data yang diterima:', data); // Tambahkan log untuk memeriksa data
+                renderChart(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 </script>
 
