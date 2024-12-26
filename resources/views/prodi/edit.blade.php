@@ -48,6 +48,14 @@
                                                         value="{{ old('prodi_name', $prodi->prodi_name) }}">
                                                 </div>
                                             </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="year_founded">Tahun Berdiri</label>
+                                                    <input type="number" id="year_founded" class="form-control"
+                                                        placeholder="Nama Program Studi" name="year_founded"
+                                                        value="{{ old('year_founded', $prodi->year_founded) }}">
+                                                </div>
+                                            </div>
                                             @auth
                                                 @if (Auth::user()->role === 'admin')
                                                     <div class="col-md-6 col-12">

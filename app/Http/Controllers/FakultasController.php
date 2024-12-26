@@ -101,7 +101,8 @@ class FakultasController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'fakultas_name' => 'required|string|max:255',            
+            'fakultas_name' => 'required|string|max:255',  
+            'year_founded' => 'required|integer',            
         ]);
 
         Fakultas::create([
@@ -124,7 +125,7 @@ class FakultasController extends Controller
         // Validasi data input
         $validatedData = $request->validate([
             'fakultas_name' => 'required|string|max:255', 
-            'year_founded' => 'required|number',           
+            'year_founded' => 'required|integer',           
         ]);
 
         $fakultas = Fakultas::findOrFail($id); 

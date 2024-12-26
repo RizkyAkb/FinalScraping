@@ -77,6 +77,7 @@ class ProdiController extends Controller
         $request->validate([
             'fakultas_id' => 'required|string',
             'prodi_name' => 'required|string|max:255',            
+            'year_founded' => 'required|integer',
         ]);
 
         Prodi::create([
@@ -107,7 +108,7 @@ class ProdiController extends Controller
         $validatedData = $request->validate([
             'fakultas_id' => 'required|string',
             'prodi_name' => 'required|string|max:255',            
-            'year_founded' => 'required|number',
+            'year_founded' => 'required|integer',
         ]);
 
         $prodi = Prodi::findOrFail($id); 

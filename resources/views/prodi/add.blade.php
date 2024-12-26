@@ -38,6 +38,13 @@
                                                         class="form-control" placeholder="Nama Prodi">
                                                 </div>
                                             </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="year_founded">Tahun Berdiri</label>
+                                                    <input type="number" id="year_founded" name="year_founded"
+                                                        class="form-control" placeholder="Tahun Berdiri">
+                                                </div>
+                                            </div>
                                             @auth
                                                 @if (Auth::user()->role === 'admin')
                                                     <div class="col-md-6 col-12">

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('fakultas_id');
             $table->string('prodi_name');
-            $table->number_format('year_founded');
+            $table->integer('year_founded');
             $table->timestamps();
         });
     }
