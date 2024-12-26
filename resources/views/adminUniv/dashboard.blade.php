@@ -65,6 +65,12 @@
                                 <option value="{{ $dosens->id }}">{{ $dosens->name }}</option>
                                 @endforeach
                             </select>
+                            <select id="filter-source" class="form-select">
+                                <option value="">Semua Source</option>
+                                <option value="scopus">Scopus</option>
+                                <option value="scholar">Scholar</option>
+                            </select>
+
                             <button class="btn btn-primary" id="apply-filters" onclick="filterChart()">Terapkan</button>
                         </div>
                     </div>
@@ -125,8 +131,9 @@
         const fakultasId = document.getElementById('filter-faculty').value;
         const prodiId = document.getElementById('filter-prodi').value;
         const dosenId = document.getElementById('filter-dosen').value;
+        const source = document.getElementById('filter-source').value;
 
-        fetch(`/admin/dashboard?fakultas_id=${fakultasId}&prodi_id=${prodiId}&dosen_id=${dosenId}`, {
+        fetch(`/admin/dashboard?fakultas_id=${fakultasId}&prodi_id=${prodiId}&dosen_id=${dosenId}&source=${source}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
@@ -142,7 +149,7 @@
                 renderChart(data);
             })
             .catch(error => {
-                console.error(' Error:', error);
+                console.error('Error:', error);
             });
     }
 </script>
