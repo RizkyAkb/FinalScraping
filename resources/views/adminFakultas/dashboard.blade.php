@@ -132,4 +132,72 @@
             </section>
         </div>
     </div>
+   
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/collect.js/4.36.1/collect.min.js" integrity="sha512-aub0tRfsNTyfYpvUs0e9G/QRsIDgKmm4x59WRkHeWUc3CXbdiMwiMQ5tTSElshZu2LCq8piM/cbIsNwuuIR4gA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script>
+                window.onload = function () {
+                    // Render chart with initial data
+                    const initialData = JSON.parse(document.getElementById('initial-data').textContent);
+                    renderChart(initialData);
+                };
+
+                function renderChart(data) {
+                    const ctx = document.getElementById('universitas').getContext('2d');
+                    if (window.myChart) {
+                        window.myChart.destroy();
+                    }
+                    window.myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.map(item => item.year),
+                            datasets: [{
+                                label: 'Jumlah Artikel',
+                                data: data.map(item => item.total),
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+
+                function filterChart() {
+                    const prodiId = document.getElementById('filter-prodi').value;
+                    const dosenId = document.getElementById('filter-dosen').value;
+
+                    // Kirim permintaan AJAX
+                    fetch(`/fakultas/dashboard?prodi_id=${prodiId}&dosen_id=${dosenId}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Data yang diterima:', data); // Tambahkan log untuk memastikan data diterima
+                        renderChart(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+
+            </script>
+
 @endsection
