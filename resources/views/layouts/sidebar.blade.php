@@ -244,7 +244,14 @@
                                         <i class="bi bi-envelope-fill"></i>
                                         <span>Statistik</span>
                                     </a>
-                                </li>                                
+                                </li>
+
+                                <li class="sidebar-item {{ Route::is('dosen.report') ? 'active' : '' }}">
+                                    <a href="{{ route('dosen.report') }}" class="sidebar-link">
+                                        <i class="bi bi-envelope-fill"></i>
+                                        <span>System Report</span>
+                                    </a>
+                                </li>
                             @endif
                             <li class="sidebar-item  has-sub">
                                 <a href="#" class='sidebar-link'>

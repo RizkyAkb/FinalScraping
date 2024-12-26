@@ -48,5 +48,10 @@ class DosenController extends Controller
     {
         $artikels = Publikasi::take(1000)->get();
         return view('adminDosen.statistik', compact('artikels'));
-    }    
+    }
+    
+    public function report()
+    {        
+        return view('user.scrapeTahun');
+    }
 }

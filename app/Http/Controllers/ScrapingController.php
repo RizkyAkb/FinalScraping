@@ -109,7 +109,7 @@ class ScrapingController extends Controller
         }
     }
 
-    public function scrapePublications($filter = [])
+    public function scrapePublications($filter = [], $startYear = null, $endYear = null)
     {
         // Ambil data author sesuai filter
         $authors = DB::table('users')
@@ -129,17 +129,28 @@ class ScrapingController extends Controller
         // Loop melalui setiap author dan scrape data
         foreach ($authors as $author) {
             if (!empty($author->scholar_id)) {
-                $this->scrapeScholar($author->scholar_id, $author->id);
+                if ($startYear && $endYear) {
+                    // Scrape Scholar berdasarkan rentang tahun
+                    $this->scrapeScholarByYearRange($author->scholar_id, $author->id, $startYear, $endYear);
+                } else {
+                    $this->scrapeScholar($author->scholar_id, $author->id);
+                }
                 sleep(2); // Delay untuk menghindari scraping terlalu cepat
             }
             if (!empty($author->scopus_id)) {
-                $this->scrapeScopus($author->scopus_id, $author->id);
+                if ($startYear && $endYear) {
+                    // Scrape Scopus berdasarkan rentang tahun
+                    $this->scrapeScopusByYearRange($author->scopus_id, $author->id, $startYear, $endYear);
+                } else {
+                    $this->scrapeScopus($author->scopus_id, $author->id);
+                }
                 sleep(2); // Delay untuk menghindari scraping terlalu cepat
             }
         }
 
         return response()->json(['message' => 'Scraping publications complete!']);
     }
+
 
     public function scrapePublicationsByProdi($prodi_id)
     {
@@ -153,8 +164,120 @@ class ScrapingController extends Controller
 
     public function scrapePublicationsByDosen($dosen_id)
     {
-        $this->scrapePublications(['id' => $dosen_id]);
+        $this->scrapePublications(['dosen_id' => $dosen_id]);
     }
+
+    public function scrapeScopusByYearRange($scopus_id, $author_id, $startYear, $endYear)
+    {
+        $api_key = '2f3be97cfe6cc239b0a9f325a660d9c1'; // API Key Scopus
+        $base_url = 'https://api.elsevier.com/content/';
+        $articles = $this->get_scopus_articles($scopus_id, $api_key, $base_url);
+
+        if ($articles) {
+            foreach ($articles['search-results']['entry'] as $article) {
+                // Pastikan artikel memiliki tanggal publikasi
+                if (!empty($article['prism:coverDate'])) {
+                    $publicationYear = (int)date('Y', strtotime($article['prism:coverDate']));
+
+                    // Hanya proses artikel dalam rentang tahun yang ditentukan
+                    if ($publicationYear >= $startYear && $publicationYear <= $endYear) {
+                        $doi = $article['prism:doi'] ?? null;
+
+                        // Cari publikasi berdasarkan DOI
+                        $existingPublication = Publikasi::where('doi', $doi)->first();
+
+                        // Data yang akan dimasukkan atau diperbarui
+                        $newData = [
+                            'author_id' => $author_id ?? 'Unknown',
+                            'title' => $article['dc:title'] ?? 'Unknown',
+                            'journal_name' => $article['prism:publicationName'] ?? 'Unknown',
+                            'publication_date' => $article['prism:coverDate'] ?? null,
+                            'citations' => $article['citedby-count'] ?? 0,
+                            'source' => 'scopus',
+                        ];
+
+                        if ($existingPublication) {
+                            // Periksa apakah ada perubahan di kolom lain
+                            $isUpdated = false;
+                            foreach ($newData as $key => $value) {
+                                if ($existingPublication->$key !== $value) {
+                                    $isUpdated = true;
+                                    break;
+                                }
+                            }
+
+                            // Jika ada perubahan, lakukan pembaruan data
+                            if ($isUpdated) {
+                                $existingPublication->update($newData);
+                            }
+                        } else {
+                            // Jika DOI belum ada, tambahkan data baru
+                            Publikasi::create(array_merge($newData, ['doi' => $doi]));
+                        }
+                    }
+                }
+            }
+        } else {
+            file_put_contents('scopus_error_log.txt', "Failed to scrape Scopus for author ID: $scopus_id\n", FILE_APPEND);
+        }
+    }
+
+    public function scrapeScholarByYearRange($scholar_id, $author_id, $startYear, $endYear)
+    {
+        $base_url = 'https://scholar.google.com/citations?user=' . $scholar_id;
+        $articles = $this->get_scholar_articles($base_url);
+
+        if ($articles) {
+            foreach ($articles as $article) {
+                // Pastikan artikel memiliki informasi tanggal publikasi
+                if (!empty($article['publication_date'])) {
+                    $publicationYear = (int)date('Y', strtotime($article['publication_date']));
+
+                    // Hanya proses artikel dalam rentang tahun yang ditentukan
+                    if ($publicationYear >= $startYear && $publicationYear <= $endYear) {
+                        if (!empty($article['title']) && !empty($article['author_name'])) {
+                            $doi = $article['doi'] ?? null;
+
+                            // Cari publikasi berdasarkan DOI
+                            $existingPublication = Publikasi::where('doi', $doi)->first();
+
+                            // Data yang akan dimasukkan atau diperbarui
+                            $newData = [
+                                'author_id' => $author_id ?? 'Unknown',
+                                'title' => $article['title'],
+                                'journal_name' => $article['journal_name'] ?? 'Unknown',
+                                'publication_date' => $article['publication_date'] ?? null,
+                                'citations' => $article['citations'] ?? 0,
+                                'source' => 'scholar',
+                            ];
+
+                            if ($existingPublication) {
+                                // Periksa apakah ada perubahan di kolom lain
+                                $isUpdated = false;
+                                foreach ($newData as $key => $value) {
+                                    if ($existingPublication->$key !== $value) {
+                                        $isUpdated = true;
+                                        break;
+                                    }
+                                }
+
+                                // Jika ada perubahan, lakukan pembaruan data
+                                if ($isUpdated) {
+                                    $existingPublication->update($newData);
+                                }
+                            } else {
+                                // Jika DOI belum ada, tambahkan data baru
+                                Publikasi::create(array_merge($newData, ['doi' => $doi]));
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            file_put_contents('scholar_error_log.txt', "Failed to scrape Scholar for user ID: $scholar_id\n", FILE_APPEND);
+        }
+    }
+
 
     // Get Scopus articles
     private function get_scopus_articles($scopus_id, $api_key, $base_url)
