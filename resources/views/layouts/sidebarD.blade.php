@@ -266,51 +266,7 @@
 
                 @yield('container')
 
-            </div>
-            <script src="../assets/static/js/components/dark.js"></script>
-            <script src="../assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-            <script src="../assets/compiled/js/app.js"></script>
-            <!-- Need: Apexcharts -->
-
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/collect.js/4.36.1/collect.min.js" integrity="sha512-aub0tRfsNTyfYpvUs0e9G/QRsIDgKmm4x59WRkHeWUc3CXbdiMwiMQ5tTSElshZu2LCq8piM/cbIsNwuuIR4gA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script>
-                window.onload = function () {
-                    const initialData = JSON.parse(document.getElementById('initial-data').textContent);
-                    renderChart(initialData);
-                };
-
-                function renderChart(data) {
-                    const ctx = document.getElementById('universitas').getContext('2d');
-                    if (window.myChart) {
-                        window.myChart.destroy();
-                    }
-                    window.myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: data.map(item => item.year), // Tahun publikasi
-                            datasets: [{
-                                label: 'Jumlah Artikel',
-                                data: data.map(item => item.total), // Jumlah artikel
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                }
-            </script>
-
+            
     </body>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
