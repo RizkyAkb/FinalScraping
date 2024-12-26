@@ -174,7 +174,16 @@ class AdminController extends Controller
             'scholar_id' => $request->scholar_id,
             'scopus_id' => $request->scopus_id,
         ]);
-        return redirect()->route('/')->with('success', 'Data berhasil ditambahkan');
+
+        $role = auth()->user()->role;
+
+        if ($role == 'admin') {
+            return redirect()->route('admin.listDosen')->with('success', 'Data berhasil ditambahkan');
+        } elseif ($role == 'fakultas') {
+            return redirect()->route('fakultas.listDosen')->with('success', 'Data berhasil ditambahkan');
+        } elseif ($role == 'prodi') {
+            return redirect()->route('prodi.listDosen')->with('success', 'Data berhasil ditambahkan');
+        }
     }
 
     // View tambah User (View-Create)
@@ -211,7 +220,15 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('/')->with('success', 'Data berhasil dihapus');
+        $role = auth()->user()->role;
+
+        if ($role == 'admin') {
+            return redirect()->route('admin.listDosen')->with('success', 'Data berhasil dihapus');
+        } elseif ($role == 'fakultas') {
+            return redirect()->route('fakultas.listDosen')->with('success', 'Data berhasil dihapus');
+        } elseif ($role == 'prodi') {
+            return redirect()->route('prodi.listDosen')->with('success', 'Data berhasil dihapus');
+        }
     }
 
     // View tambah User (View-Create)
@@ -242,7 +259,14 @@ class AdminController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-        return redirect()->route('/')->with('success', 'Data berhasil ditambahkan');
+
+        $role = auth()->user()->role;
+
+        if ($role == 'admin') {
+            return redirect()->route('admin.listAdminProdi')->with('success', 'Data berhasil ditambahkan');
+        } elseif ($role == 'fakultas') {
+            return redirect()->route('fakultas.listAdminProdi')->with('success', 'Data berhasil ditambahkan');
+        }
     }
 
     // View tambah User (View-Create)
@@ -277,7 +301,13 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('/')->with('success', 'Data berhasil dihapus');
+        $role = auth()->user()->role;
+
+        if ($role == 'admin') {
+            return redirect()->route('admin.listAdminProdi')->with('success', 'Data berhasil dihapus');
+        } elseif ($role == 'fakultas') {
+            return redirect()->route('fakultas.listAdminProdi')->with('success', 'Data berhasil dihapus');
+        }
     }
 
     // View tambah User (View-Create)
@@ -306,7 +336,7 @@ class AdminController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-        return redirect()->route('/')->with('success', 'Data berhasil ditambahkan');
+        return redirect()->route('admin.listAdminFakultas')->with('success', 'Data berhasil ditambahkan');
     }
 
     // View tambah User (View-Create)
@@ -340,6 +370,6 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('/')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('admin.listAdminFakultas')->with('success', 'Data berhasil dihapus');
     }
 }
