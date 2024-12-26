@@ -25,9 +25,19 @@ class AdminController extends Controller
         $fakultasId = $request->get('fakultas_id');
         $prodiId = $request->get('prodi_id');
         $dosenId = $request->get('dosen_id');
+        $source = $request->get('source');
+
 
         $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
-            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total");
+        ->selectRaw("
+            CASE 
+                WHEN LENGTH(publication_date) = 4 THEN publication_date 
+                WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date) 
+                ELSE NULL 
+            END as year,
+            COUNT(*) as total
+        ");
+    
 
         if ($fakultasId) {
             $publikasiQuery->where('users.fakultas_id', $fakultasId);
@@ -39,6 +49,10 @@ class AdminController extends Controller
 
         if ($dosenId) {
             $publikasiQuery->where('users.id', $dosenId); // Perbaiki filter untuk dosen
+        }
+
+        if ($source) {
+            $publikasiQuery->where('publikasis.source', $source);
         }
 
         $publikasiData = $publikasiQuery
