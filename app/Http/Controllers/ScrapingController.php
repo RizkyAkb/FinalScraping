@@ -12,6 +12,22 @@ use Goutte\Client;
 
 class ScrapingController extends Controller
 {
+    public function scrapePublicationsFrontend(Request $request)
+    {
+        $filter = [
+            'dosen_id' => $request->input('dosen_id'),
+            'prodi_id' => $request->input('prodi_id'),
+            'fakultas_id' => $request->input('fakultas_id'),
+        ];
+        $startYear = $request->input('startYear');
+        $endYear = $request->input('endYear');
+
+        // Panggil fungsi scrapePublications
+        $this->scrapePublications($filter, $startYear, $endYear);
+
+        return back()->with('success', 'Scraping berhasil dimulai!');
+    }
+    
     // Scraping Scopus
     public function scrapeScopus($scopus_id, $author_id)
     {
@@ -231,7 +247,7 @@ class ScrapingController extends Controller
             foreach ($articles as $article) {
                 // Pastikan artikel memiliki informasi tanggal publikasi
                 if (!empty($article['publication_date'])) {
-                    $publicationYear = (int)date('Y', strtotime($article['publication_date']));
+                    $publicationYear = (int)$article['publication_date'];
 
                     // Hanya proses artikel dalam rentang tahun yang ditentukan
                     if ($publicationYear >= $startYear && $publicationYear <= $endYear) {

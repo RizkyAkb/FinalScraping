@@ -23,6 +23,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/scrape-by-year', [ScrapingController::class, 'scrapePublicationsFrontend'])->name('scrape.publications');
 });
 
 //Admin Univ
@@ -82,11 +84,11 @@ Route::middleware(['auth', 'role:prodi'])->group(function () {
 
 //Admin Dosen
 Route::middleware(['auth', 'role:dosen'])->group(function () {
-    Route::get('/scrape/dosen/{id}', [ScrapingController::class, 'scrapePublicationsByDosen'])->name('dosen.scrape');
+    Route::get('/scrape/dosen/{id}', [ScrapingController::class, 'scrapePublicationsByDosen'])->name('dosen.scrape');    
 
     Route::get('/dosen/dashboard', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
     Route::get('/dosen/statistik', [DosenController::class, 'statistik'])->name('dosen.statistik');
-    Route::get('/dosen/report', [DosenController::class, 'report'])->name('dosen.report');
+    Route::get('/dosen/report', [DosenController::class, 'report'])->name('dosen.report');    
 
 });
 
