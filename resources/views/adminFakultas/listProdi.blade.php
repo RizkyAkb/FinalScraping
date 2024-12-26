@@ -30,7 +30,7 @@
                                     @forelse ($prodis as $prodi)
                                         <tr>
                                             <td>{{ $prodi->prodi_name }}</td>
-                                            <td>'N/A'</td>
+                                            <td>{{ $prodi->year_founded }}</td>
                                             <td>{{ $prodi->user->where('role', 'dosen')->count() }}</td>
                                             <td>{{ $prodi->fakultas->fakultas_name ?? 'N/A' }}</td>
                                             <td>
