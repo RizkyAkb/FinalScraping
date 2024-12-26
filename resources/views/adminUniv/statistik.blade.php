@@ -8,13 +8,19 @@
         </header>
         <div class="page-content">
             <section class="section">
+                
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('scrapeAll') }}" class="btn btn-primary btn-lg" id="scrapeButton">Scraping Data</a>
                 </div>
 
                 <div class="page-heading">
-                    <h3>Data Publikasi dan Sitasi Dosen Fakultas ..</h3>
-
+                    <h3>Data Publikasi dan Sitasi Dosen UNS</h3>
                 </div>
                 <div class="card">
                     <div class="card-body">
@@ -31,194 +37,166 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($artikels as $artikel)
+                                    @foreach ($artikels as $artikel)
                                         <tr>
                                             <td>{{ $artikel->user->name }}</td>
                                             <td>{{ $artikel->user->prodi->prodi_name }}</td>
                                             <td>{{ $artikel->title }}</td>
-                                            <td>{{ $artikel->publication_date }}</td>
-                                            <td>{{ $artikel->citations }}</td>
-                                            <td>{{ $artikel->source }}</td>                                            
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td class="text-center text-mute" colspan="4">Data Fakultas Tidak Ditemukan
+                                            <td>{{ $artikel->publication_date ? substr($artikel->publication_date, 0, 4) : '-' }}
                                             </td>
+                                            <td>{{ $artikel->citations }}</td>
+                                            <td>{{ $artikel->source }}</td>
                                         </tr>
-                                    @endforelse
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </section>
-            <section class="section">
-                <div class="page-heading">
-                    <h3>Perbandingan Jumlah Sitasi Dosen Antar Prodi</h3>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table tablex">
-                                <thead>
-                                    <tr>
-                                        <th>Program Studi</th>
-                                        <th>Tahun</th>
-                                        <th>Jumlah Sitasi</th>
-                                        <th>Sumber</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Pendidikan Biologi</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <input type="number" class="form-control form-control-sm me-1"
-                                                    placeholder="Dari" value="2010">
-                                                <input type="number" class="form-control form-control-sm"
-                                                    placeholder="Sampai" value="2015">
-                                            </div>
-                                        </td>
-                                        <td>751</td>
-                                        <td>Scopus</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Pendidikan Matematika</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <input type="number" class="form-control form-control-sm me-1"
-                                                    placeholder="Dari" value="2010">
-                                                <input type="number" class="form-control form-control-sm"
-                                                    placeholder="Sampai" value="2015">
-                                            </div>
-                                        </td>
-                                        <td>700</td>
-                                        <td>Scholar</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="section">
-                <div class="page-heading">
-                    <h3>Perbandingan Statistik Jumlah Sitasi Dosen Antar Fakultas</h3>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table tablex">
-                                <thead>
-                                    <tr>
-                                        <th>Fakultas</th>
-                                        <th>Tahun</th>
-                                        <th>Jumlah Sitasi</th>
-                                        <th>Sumber</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>FKIP</td>
-                                        <td>
-                                            2018
-                                        </td>
-                                        <td>751</td>
-                                        <td>Scopus</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="section">
-                <div class="page-heading">
-                    <h3>Histori Publikasi Dosen Fakultas ...</h3>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table tablex">
-                                <thead>
-                                    <tr>
-                                        <th>Penulis</th>
-                                        <th>Program Studi</th>
-                                        <th>Judul</th>
-                                        <th>Tahun</th>
-                                        <th>Sumber</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Totok</td>
-                                        <td>PTIK</td>
-                                        <td>Cara Mengawinkan Silang Sapi dengan Kambing</td>
-                                        <td>
-                                            2015
-                                        </td>
-                                        <td>Scopus</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Totok</td>
-                                        <td>Pendidikan Agama</td>
-                                        <td>Cara Mati Tanpa Dosa</td>
-                                        <td>
-                                            2018
-                                        </td>
-                                        <td>Scholar</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-@endsection
 
-<!-- Modal -->
-<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true"
-    data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <div class="spinner-border text-primary mb-3" role="status">
-                    <span class="visually-hidden">Loading...</span>
+            <div class="col-12">
+                <div class="page-heading">
+                    <h3>Statistik Sitasi Dosen Antar Prodi</h3>
                 </div>
-                <p>Proses scraping sedang berlangsung, harap menunggu...</p>
+                <div class="card">
+                    <div class="card-body">
+                        <div style="margin: auto; max-width: 100%;">
+                            <canvas id="pieChart" width="500" height="500"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <div class="col-12">
+                <div class="page-heading">
+                    <h3>Statistik Sitasi Dosen Antar Fakultas</h3>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div style="margin: auto; max-width: 100%;">
+                            <canvas id="pieChart2" width="500" height="500"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
 
-<script>
-    document.getElementById('scrapeButton').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default link behavior
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx1 = document.getElementById('pieChart').getContext('2d');
+        const ctx2 = document.getElementById('pieChart2').getContext('2d');
+        
+        const chartDataProdi = @json($chartDataProdi);
+        const chartDataFakultas = @json($chartDataFakultas);
 
-        // Show the loading modal
-        const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
-        loadingModal.show();
+        // Data untuk chart Prodi
+        const labelsProdi = chartDataProdi.map(data => data.prodi);
+        const dataProdi = chartDataProdi.map(data => data.citation);
 
-        // Send the AJAX request
-        fetch(this.href, {
-                method: 'GET',
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Hide the loading modal
-                loadingModal.hide();
+        // Data untuk chart Fakultas
+        const labelsFakultas = chartDataFakultas.map(data => data.fakultas);
+        const dataFakultas = chartDataFakultas.map(data => data.citation);
 
-                // Display success message
-                alert(data.message);
-            })
-            .catch(error => {
-                // Hide the loading modal if there's an error
-                loadingModal.hide();
+        // Chart Prodi
+        new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: labelsProdi,
+                datasets: [{
+                    label: 'Jumlah Citation',
+                    data: dataProdi,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1,
+                    
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 20,
+                        bottom: 20,
+                        left: 20,
+                        right: 20,
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom', // Geser legenda ke bawah chart untuk lebih banyak ruang
+                        labels: {
+                            boxWidth: 10, // Ukuran kotak warna pada label
+                        }
+                    }
+                }
+            }
+        });
 
-                // Display error message
-                alert('Terjadi kesalahan: ' + error.message);
-            });
-    });
-</script>
+        // Chart Fakultas
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: labelsFakultas,
+                datasets: [{
+                    label: 'Jumlah Citation',
+                    data: dataFakultas,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 20,
+                        bottom: 20,
+                        left: 20,
+                        right: 20,
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 10,
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+@endsection

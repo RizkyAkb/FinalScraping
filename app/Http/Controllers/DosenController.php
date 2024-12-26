@@ -13,7 +13,7 @@ class DosenController extends Controller
     public function dashboard(Request $request)
     {
         $user = Auth::user(); // Mendapatkan pengguna yang login
-        
+
         if (!$user || $user->role !== 'dosen') {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
@@ -57,12 +57,33 @@ class DosenController extends Controller
 
     public function statistik()
     {
-        $artikels = Publikasi::take(1000)->get();
-        return view('adminDosen.statistik', compact('artikels'));
+        $artikels = Publikasi::where('author_id', Auth::user()->id)->get();
+
+        // Ambil data user yang sedang login
+        $user = Auth::user();
+
+        // Ambil data dosen yang berada di prodi yang sama dengan user yang sedang login dan memiliki role 'dosen'
+        $dosenInProdi = User::where('prodi_id', $user->prodi_id)
+            ->where('role', 'dosen') // Filter hanya dengan role 'dosen'
+            ->with(['publikasi' => function ($query) {
+                $query->selectRaw('author_id, SUM(citations) as total_citation')
+                    ->groupBy('author_id');
+            }])
+            ->get();
+
+        // Mengumpulkan data dosen dan jumlah citation mereka
+        $chartData = $dosenInProdi->map(function ($dosen) {
+            return [
+                'name' => $dosen->name, // Nama dosen
+                'citation' => $dosen->publikasi->sum('total_citation'), // Total citation per dosen
+            ];
+        });
+
+        return view('adminDosen.statistik', compact('artikels', 'chartData'));
     }
-    
+
     public function report()
-    {        
+    {
         return view('user.scrapeTahun');
     }
 }

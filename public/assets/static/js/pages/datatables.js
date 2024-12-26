@@ -19,6 +19,9 @@ let customized_datatable = $("#table2").DataTable({
 let customized_datatablez = $(".tablex").DataTable({
     responsive: true,
     pagingType: 'simple',
+    language: {
+        emptyTable: "Data Publikasi Tidak Ditemukan."
+    },
     dom:
 		"<'row'<'col-3'l><'col-9'f>>" +
 		"<'row dt-row'<'col-sm-12'tr>>" +
@@ -27,7 +30,8 @@ let customized_datatablez = $(".tablex").DataTable({
         "info": "Page _PAGE_ of _PAGES_",
         "lengthMenu": "_MENU_ ",
         "search": "",
-        "searchPlaceholder": "Search.."
+        "searchPlaceholder": "Search..",
+        "emptyTable": "Data Publikasi Tidak Ditemukan."
     }
 })
 

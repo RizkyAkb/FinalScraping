@@ -35,7 +35,7 @@ class ProdiController extends Controller
             ->count();
 
         // Filter data publikasi untuk grafik
-        $dosenId = $request->get('dosen_id');
+        $dosenId = $request->get('author_id');
 
         $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
             ->selectRaw("
@@ -69,8 +69,29 @@ class ProdiController extends Controller
 
     public function statistik()
     {
-        $artikels = Publikasi::take(1000)->get();
-        return view('adminProdi.statistik', compact('artikels'));
+        $prodi_id = Auth::user()->prodi_id;
+        $artikels = Publikasi::whereHas('user', function ($query) use ($prodi_id) {
+            $query->where('prodi_id', $prodi_id);
+        })->get();
+
+        // Ambil data jumlah citation per prodi
+        $data = Prodi::with(['user.publikasi' => function ($query) {
+            $query->selectRaw('author_id, SUM(citations) as total_citation')->groupBy('author_id');
+        }])->get();
+
+        // Format data untuk chart
+        $chartData = $data->map(function ($prodi) {
+            $totalCitation = $prodi->user->reduce(function ($carry, $user) {
+                return $carry + $user->publikasi->sum('total_citation');
+            }, 0);
+
+            return [
+                'prodi' => $prodi->prodi_name, // Kolom nama prodi
+                'citation' => $totalCitation,
+            ];
+        });
+
+        return view('adminProdi.statistik', compact('artikels', 'chartData'));
     }
 
     public function listDosen()
@@ -79,6 +100,11 @@ class ProdiController extends Controller
         return view('adminProdi.listDosen', compact('dosens'));
     }
 
+    public function report()
+    {        
+        return view('user.scrapeTahun');
+    }
+    
     // View tambah Prodi (View-Create)
     public function create()
     {

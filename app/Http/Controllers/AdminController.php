@@ -29,7 +29,7 @@ class AdminController extends Controller
 
 
         $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
-        ->selectRaw("
+            ->selectRaw("
             CASE 
                 WHEN LENGTH(publication_date) = 4 THEN publication_date 
                 WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date) 
@@ -37,7 +37,7 @@ class AdminController extends Controller
             END as year,
             COUNT(*) as total
         ");
-    
+
 
         if ($fakultasId) {
             $publikasiQuery->where('users.fakultas_id', $fakultasId);
@@ -68,11 +68,43 @@ class AdminController extends Controller
         return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'artikel', 'publikasiData', 'faculties', 'prodies', 'dosen', 'dosenz'));
     }
 
-
     public function statistik()
     {
-        $artikels = Publikasi::take(1000)->get();
-        return view('adminUniv.statistik', compact('artikels'));
+        $artikels = Publikasi::all();
+
+        // Ambil data jumlah citation per prodi
+        $dataProdi = Prodi::with(['user.publikasi' => function ($query) {
+            $query->selectRaw('author_id, SUM(citations) as total_citation')->groupBy('author_id');
+        }])->get();
+
+        // Ambil data jumlah citation per prodi
+        $dataFakultas = Fakultas::with(['user.publikasi' => function ($query) {
+            $query->selectRaw('author_id, SUM(citations) as total_citation')->groupBy('author_id');
+        }])->get();
+
+        $chartDataProdi = $dataProdi->map(function ($prodi) {
+            $totalCitation = $prodi->user->reduce(function ($carry, $user) {
+                return $carry + $user->publikasi->sum('total_citation');
+            }, 0);
+
+            return [
+                'prodi' => $prodi->prodi_name, // Kolom nama prodi
+                'citation' => $totalCitation,
+            ];
+        });
+
+        $chartDataFakultas = $dataFakultas->map(function ($fakultas) {
+            $totalCitation = $fakultas->user->reduce(function ($carry, $user) {
+                return $carry + $user->publikasi->sum('total_citation');
+            }, 0);
+
+            return [
+                'fakultas' => $fakultas->fakultas_name, // Kolom nama fakultas
+                'citation' => $totalCitation,
+            ];
+        });
+
+        return view('adminUniv.statistik', compact('artikels', 'chartDataProdi', 'chartDataFakultas'));
     }
 
     public function listFakultas()
@@ -103,6 +135,11 @@ class AdminController extends Controller
     {
         $admins = User::where('role', 'prodi')->with(['prodi', 'fakultas'])->get();
         return view('adminUniv.listAdminProdi', compact('admins'));
+    }
+
+    public function report()
+    {
+        return view('user.scrapeTahun');
     }
 
     // View tambah User (View-Create)
@@ -146,7 +183,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $fakultas = Fakultas::all();
         $prodis = Prodi::all();
-        return view('user.edit', compact('user','fakultas', 'prodis'));
+        return view('user.edit', compact('user', 'fakultas', 'prodis'));
     }
 
     // Mengupdate User dari database (Update)
@@ -162,8 +199,8 @@ class AdminController extends Controller
             'scopus_id' => 'nullable|string|max:255',
         ]);
 
-        $user = User::findOrFail($id); 
-        $user->update($validatedData); 
+        $user = User::findOrFail($id);
+        $user->update($validatedData);
         // Redirect ke halaman daftar dosen dengan pesan sukses
         return redirect()->route('user.edit', $id)->with('success', 'Data berhasil diperbarui!');
     }
@@ -194,7 +231,7 @@ class AdminController extends Controller
             'prodi' => 'required|exists:prodis,id',
             'role' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',            
+            'password' => 'required|min:6',
         ]);
 
         User::create([
@@ -203,7 +240,7 @@ class AdminController extends Controller
             'prodi_id' => $request->prodi,
             'role' => 'prodi',
             'email' => $request->email,
-            'password' => bcrypt($request->password),            
+            'password' => bcrypt($request->password),
         ]);
         return redirect()->route('/')->with('success', 'Data berhasil ditambahkan');
     }
@@ -214,7 +251,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $fakultas = Fakultas::all();
         $prodis = Prodi::all();
-        return view('adminProdi.edit', compact('user','fakultas', 'prodis'));
+        return view('adminProdi.edit', compact('user', 'fakultas', 'prodis'));
     }
 
     // Mengupdate User dari database (Update)
@@ -225,11 +262,11 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'fakultas_id' => 'required|string',
             'prodi_id' => 'required|string',
-            'email' => 'required|email',            
+            'email' => 'required|email',
         ]);
 
-        $user = User::findOrFail($id); 
-        $user->update($validatedData); 
+        $user = User::findOrFail($id);
+        $user->update($validatedData);
         // Redirect ke halaman daftar dosen dengan pesan sukses
         return redirect()->route('adminProdi.edit', $id)->with('success', 'Data berhasil diperbarui!');
     }
@@ -256,18 +293,18 @@ class AdminController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'fakultas' => 'required|exists:fakultas,id',            
+            'fakultas' => 'required|exists:fakultas,id',
             'role' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',            
+            'password' => 'required|min:6',
         ]);
 
         User::create([
             'name' => $request->name,
-            'fakultas_id' => $request->fakultas,            
+            'fakultas_id' => $request->fakultas,
             'role' => 'fakultas',
             'email' => $request->email,
-            'password' => bcrypt($request->password),            
+            'password' => bcrypt($request->password),
         ]);
         return redirect()->route('/')->with('success', 'Data berhasil ditambahkan');
     }
@@ -278,7 +315,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $fakultas = Fakultas::all();
         $prodis = Prodi::all();
-        return view('adminFakultas.edit', compact('user','fakultas', 'prodis'));
+        return view('adminFakultas.edit', compact('user', 'fakultas', 'prodis'));
     }
 
     // Mengupdate User dari database (Update)
@@ -287,12 +324,12 @@ class AdminController extends Controller
         // Validasi data input
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'fakultas_id' => 'required|string',            
-            'email' => 'required|email',            
+            'fakultas_id' => 'required|string',
+            'email' => 'required|email',
         ]);
 
-        $user = User::findOrFail($id); 
-        $user->update($validatedData); 
+        $user = User::findOrFail($id);
+        $user->update($validatedData);
         // Redirect ke halaman daftar dosen dengan pesan sukses
         return redirect()->route('adminFakultas.edit', $id)->with('success', 'Data berhasil diperbarui!');
     }

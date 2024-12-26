@@ -74,13 +74,36 @@ class FakultasController extends Controller
         return view('adminFakultas.dashboard', compact('prodies', 'dosen', 'publikasiData', 'prodi', 'artikel', 'dosenz'));
     }
 
-
-
+    public function report()
+    {        
+        return view('user.scrapeTahun');
+    }
 
     public function statistik()
     {
-        $artikels = Publikasi::take(1000)->get();
-        return view('adminFakultas.statistik', compact('artikels'));
+        $fakultas_id = Auth::user()->fakultas_id;
+        $artikels = Publikasi::whereHas('user', function ($query) use ($fakultas_id) {
+            $query->where('fakultas_id', $fakultas_id);
+        })->get();
+
+
+        // Ambil data jumlah citation per prodi
+        $dataFakultas = Fakultas::with(['user.publikasi' => function ($query) {
+            $query->selectRaw('author_id, SUM(citations) as total_citation')->groupBy('author_id');
+        }])->get();        
+
+        $chartDataFakultas = $dataFakultas->map(function ($fakultas) {
+            $totalCitation = $fakultas->user->reduce(function ($carry, $user) {
+                return $carry + $user->publikasi->sum('total_citation');
+            }, 0);
+
+            return [
+                'fakultas' => $fakultas->fakultas_name, // Kolom nama fakultas
+                'citation' => $totalCitation,
+            ];
+        });
+
+        return view('adminFakultas.statistik', compact('artikels', 'chartDataFakultas'));
     }
 
     public function listProdi()

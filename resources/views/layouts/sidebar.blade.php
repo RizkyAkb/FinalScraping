@@ -113,6 +113,12 @@
                                     </a>
                                 </li>
 
+                                <li class="sidebar-item {{ Route::is('admin.report') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.report') }}" class="sidebar-link">
+                                        <i class="bi bi-envelope-fill"></i>
+                                        <span>System Report</span>
+                                    </a>
+                                </li>
 
                                 <li
                                     class="sidebar-item has-sub {{ Route::is('admin.listAdminFakultas', 'admin.listAdminProdi') ? 'active' : '' }}">
@@ -160,15 +166,15 @@
                                     </a>
                                 </li>
 
-                                <li class="sidebar-item {{ Route::is('fakultas.listDosen') ? 'active' : '' }}">
-                                    <a href="{{ route('fakultas.listDosen') }}" class="sidebar-link">
-                                        <i class="bi bi-basket-fill"></i>
-                                        <span>Dosen</span>
+                                <li class="sidebar-item {{ Route::is('fakultas.report') ? 'active' : '' }}">
+                                    <a href="{{ route('fakultas.report') }}" class="sidebar-link">
+                                        <i class="bi bi-envelope-fill"></i>
+                                        <span>System Report</span>
                                     </a>
                                 </li>
 
                                 <li
-                                    class="sidebar-item has-sub {{ Route::is('dosenAdminFakultas', 'fakultas.listAdminProdi') ? 'active' : '' }}">
+                                    class="sidebar-item has-sub {{ Route::is('fakultas.listDosen', 'fakultas.listAdminProdi') ? 'active' : '' }}">
                                     <a href="#" class="sidebar-link">
                                         <i class="bi bi-person-circle"></i>
                                         <span>Admin</span>
@@ -182,6 +188,7 @@
                                             <a href="{{ route('fakultas.listAdminProdi') }}" class="submenu-link">Admin
                                                 Prodi</a>
                                         </li>
+                                        
                                     </ul>
                                 </li>
                             @endif
@@ -202,28 +209,25 @@
                                         <i class="bi bi-envelope-fill"></i>
                                         <span>Statistik</span>
                                     </a>
-                                </li>
+                                </li>                                
 
-                                <li class="sidebar-item {{ Route::is('prodi.listDosen') ? 'active' : '' }}">
-                                    <a href="{{ route('prodi.listDosen') }}" class="sidebar-link">
-                                        <i class="bi bi-basket-fill"></i>
-                                        <span>Dosen</span>
+                                <li class="sidebar-item {{ Route::is('prodi.report') ? 'active' : '' }}">
+                                    <a href="{{ route('prodi.report') }}" class="sidebar-link">
+                                        <i class="bi bi-envelope-fill"></i>
+                                        <span>System Report</span>
                                     </a>
                                 </li>
 
                                 <li
-                                    class="sidebar-item has-sub {{ Route::is('dosenAdminFakultas', 'adminProdiFakultas') ? 'active' : '' }}">
+                                    class="sidebar-item has-sub {{ Route::is('prodi.listDosen') ? 'active' : '' }}">
                                     <a href="#" class="sidebar-link">
                                         <i class="bi bi-person-circle"></i>
                                         <span>Admin</span>
                                     </a>
                                     <ul class="submenu">
-                                        <li class="submenu-item {{ Route::is('dosenAdminFakultas') ? 'active' : '' }}">
-                                            <a href="{{ route('prodi.dashboard') }}" class="submenu-link">Dosen</a>
-                                        </li>
-                                        <li class="submenu-item {{ Route::is('adminProdiFakultas') ? 'active' : '' }}">
-                                            <a href="{{ route('prodi.dashboard') }}" class="submenu-link">Admin Prodi</a>
-                                        </li>
+                                        <li class="submenu-item {{ Route::is('prodi.listDosen') ? 'active' : '' }}">
+                                            <a href="{{ route('prodi.listDosen') }}" class="submenu-link">Dosen</a>
+                                        </li>                                        
                                     </ul>
                                 </li>
                             @endif

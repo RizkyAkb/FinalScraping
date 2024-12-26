@@ -39,6 +39,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dosen', [AdminController::class, 'listDosen'])->name('admin.listDosen');
     Route::get('/admin/admin-fakultas', [AdminController::class, 'listAdminFakultas'])->name('admin.listAdminFakultas');
     Route::get('/admin/admin-prodi', [AdminController::class, 'listAdminProdi'])->name('admin.listAdminProdi');
+    Route::get('/admin/report', [FakultasController::class, 'report'])->name('admin.report');
 
     //CRUD FAKULTAS
     // ADD Fakultas    
@@ -71,6 +72,7 @@ Route::middleware(['auth', 'role:fakultas'])->group(function () {
     Route::get('/fakultas/prodi', [FakultasController::class, 'listProdi'])->name('fakultas.listProdi');
     Route::get('/fakultas/dosen', [FakultasController::class, 'listDosen'])->name('fakultas.listDosen');
     Route::get('/fakultas/admin-prodi', [FakultasController::class, 'listAdminProdi'])->name('fakultas.listAdminProdi');
+    Route::get('/fakultas/report', [FakultasController::class, 'report'])->name('fakultas.report');
 });
 
 //Admin Prodi
@@ -80,6 +82,7 @@ Route::middleware(['auth', 'role:prodi'])->group(function () {
     Route::get('/prodi/dashboard', [ProdiController::class, 'dashboard'])->name('prodi.dashboard');
     Route::get('/prodi/statistik', [ProdiController::class, 'statistik'])->name('prodi.statistik');
     Route::get('/prodi/dosen', [ProdiController::class, 'listDosen'])->name('prodi.listDosen');
+    Route::get('/prodi/report', [ProdiController::class, 'report'])->name('prodi.report');
 });
 
 //Admin Dosen

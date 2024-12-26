@@ -25,9 +25,9 @@ class ScrapingController extends Controller
         // Panggil fungsi scrapePublications
         $this->scrapePublications($filter, $startYear, $endYear);
 
-        return back()->with('success', 'Scraping berhasil dimulai!');
+        return back()->with('success', 'Scraping berhasil!');
     }
-    
+
     // Scraping Scopus
     public function scrapeScopus($scopus_id, $author_id)
     {
@@ -164,23 +164,39 @@ class ScrapingController extends Controller
             }
         }
 
-        return response()->json(['message' => 'Scraping publications complete!']);
+        $role = auth()->user()->role;
+
+        if ($role == 'admin') {
+            return redirect()->route('admin.statistik')->with('success', 'Scraping berhasil!');
+        } elseif ($role == 'fakultas') {
+            return redirect()->route('fakultas.statistik')->with('success', 'Scraping berhasil!');
+        } elseif ($role == 'prodi') {
+            return redirect()->route('prodi.statistik')->with('success', 'Scraping berhasil!');
+        } elseif ($role == 'dosen') {
+            return redirect()->route('dosen.statistik')->with('success', 'Scraping berhasil!');
+        }
     }
 
 
     public function scrapePublicationsByProdi($prodi_id)
     {
         $this->scrapePublications(['prodi_id' => $prodi_id]);
+
+        return redirect()->route('prodi.statistik')->with('success', 'Scraping berhasil!');
     }
 
     public function scrapePublicationsByFakultas($fakultas_id)
     {
         $this->scrapePublications(['fakultas_id' => $fakultas_id]);
+
+        return redirect()->route('fakultas.statistik')->with('success', 'Scraping berhasil!');
     }
 
     public function scrapePublicationsByDosen($dosen_id)
     {
         $this->scrapePublications(['dosen_id' => $dosen_id]);
+
+        return redirect()->route('dosen.statistik')->with('success', 'Scraping berhasil!');
     }
 
     public function scrapeScopusByYearRange($scopus_id, $author_id, $startYear, $endYear)
