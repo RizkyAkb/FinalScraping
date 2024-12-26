@@ -172,29 +172,28 @@
         });
     }
 
-    function filterChart() {
-        const dosenId = document.getElementById('filter-dosen').value;
-        const source = document.getElementById('filter-source').value;
+    async function filterChart() {
+        try {
+            const dosenId = document.getElementById('filter-dosen').value;
+            const source = document.getElementById('filter-source').value;
 
-        // Kirim permintaan AJAX
-        fetch(`/prodi/dashboard?dosen_id=${dosenId}&source=${source}`, {
+            // Kirim permintaan AJAX
+            const response = await fetch(`/prodi/dashboard?dosen_id=${dosenId}&source=${source}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Data yang diterima:', data); // Tambahkan log untuk memastikan data diterima
-                renderChart(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
             });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log('Data yang diterima:', data); // Tambahkan log untuk memeriksa data
+            renderChart(data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
     }
 </script>
 @endsection

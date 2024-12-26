@@ -127,30 +127,30 @@
         });
     }
 
-    function filterChart() {
-        const fakultasId = document.getElementById('filter-faculty').value;
-        const prodiId = document.getElementById('filter-prodi').value;
-        const dosenId = document.getElementById('filter-dosen').value;
-        const source = document.getElementById('filter-source').value;
+    async function filterChart() {
+        try {
+            const fakultasId = document.getElementById('filter-faculty').value;
+            const prodiId = document.getElementById('filter-prodi').value;
+            const dosenId = document.getElementById('filter-dosen').value;
+            const source = document.getElementById('filter-source').value;
 
-        fetch(`/admin/dashboard?fakultas_id=${fakultasId}&prodi_id=${prodiId}&dosen_id=${dosenId}&source=${source}`, {
+            const response = await fetch(`/admin/dashboard?fakultas_id=${fakultasId}&prodi_id=${prodiId}&dosen_id=${dosenId}&source=${source}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Data yang diterima:', data); // Tambahkan log untuk memeriksa data
-                renderChart(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
             });
+
+            if (!response.ok) {
+                console.error('Failed to fetch data:', response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+            console.log('Data diterima:', data); // Debugging
+            renderChart(data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 </script>
 @endsection

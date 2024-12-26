@@ -166,27 +166,26 @@
         });
     }
 
-    function filterChart() {
-        const source = document.getElementById('filter-source').value;
+    async function filterChart() {
+        try {
+            const source = document.getElementById('filter-source').value;
 
-        fetch(`/dosen/dashboard?source=${source}`, {
+            const response = await fetch(`/dosen/dashboard?source=${source}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Data yang diterima:', data); // Tambahkan log untuk memeriksa data
-                renderChart(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
             });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log('Data yang diterima:', data); // Tambahkan log untuk memeriksa data
+            renderChart(data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 </script>
 
