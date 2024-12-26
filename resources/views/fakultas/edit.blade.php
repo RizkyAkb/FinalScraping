@@ -47,7 +47,15 @@
                                                         placeholder="Nama Fakultas" name="fakultas_name"
                                                         value="{{ old('fakultas_name', $fakultas->fakultas_name) }}">
                                                 </div>
-                                            </div>                                            
+                                            </div>    
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="year_founded">Tahun Berdiri</label>
+                                                    <input type="number" id="year_founded" class="form-control"
+                                                        placeholder="Nama Fakultas" name="year_founded"
+                                                        value="{{ old('year_founded', $fakultas->year_founded) }}">
+                                                </div>
+                                            </div>                                        
                                             <div class="col-12 d-flex justify-content-end">
                                                 <button type="submit" class="btn btn-primary me-1 mb-1">Update</button>
                                             </div>

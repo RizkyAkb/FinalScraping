@@ -81,7 +81,8 @@ class ProdiController extends Controller
 
         Prodi::create([
             'fakultas_id' => $request->fakultas_id,
-            'prodi_name' => $request->prodi_name,            
+            'prodi_name' => $request->prodi_name,    
+            'year_founded' => $request->year_founded,        
         ]);
         
         if (auth()->user()->role === 'admin') {
@@ -106,6 +107,7 @@ class ProdiController extends Controller
         $validatedData = $request->validate([
             'fakultas_id' => 'required|string',
             'prodi_name' => 'required|string|max:255',            
+            'year_founded' => 'required|number',
         ]);
 
         $prodi = Prodi::findOrFail($id); 

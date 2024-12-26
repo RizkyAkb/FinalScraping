@@ -105,7 +105,8 @@ class FakultasController extends Controller
         ]);
 
         Fakultas::create([
-            'fakultas_name' => $request->fakultas_name,            
+            'fakultas_name' => $request->fakultas_name, 
+            'year_founded' => $request->year_founded,           
         ]);
         return redirect()->route('admin.listFakultas')->with('success', 'Data berhasil ditambahkan');
     }
@@ -122,7 +123,8 @@ class FakultasController extends Controller
     {
         // Validasi data input
         $validatedData = $request->validate([
-            'fakultas_name' => 'required|string|max:255',            
+            'fakultas_name' => 'required|string|max:255', 
+            'year_founded' => 'required|number',           
         ]);
 
         $fakultas = Fakultas::findOrFail($id); 

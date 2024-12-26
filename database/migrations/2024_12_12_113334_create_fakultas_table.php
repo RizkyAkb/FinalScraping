@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('fakultas', function (Blueprint $table) {
             $table->id();
             $table->string('fakultas_name');
+            $table->number_format('year_founded');
             $table->timestamps();
         });
     }
