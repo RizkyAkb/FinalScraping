@@ -82,6 +82,7 @@ Route::middleware(['auth', 'role:prodi'])->group(function () {
 //Admin Dosen
 Route::middleware(['auth', 'role:dosen'])->group(function () {
     Route::get('/dosen/dashboard', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
+
 });
 
 Route::middleware(['auth', 'role:admin,fakultas,prodi'])->group(function () {

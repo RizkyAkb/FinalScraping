@@ -1,4 +1,4 @@
-@extends('layouts.sidebar')
+@extends('layouts.sidebarF')
 @section('container')
     <div id="main">
         <header class="mb-3">
@@ -59,7 +59,7 @@
                                         </div>
                                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                             <h6 class="text-muted font-semibold">Jumlah Dosen</h6>
-                                            <h6 class="font-extrabold mb-0">{{ $dosen }}</h6>
+                                            <h6 class="font-extrabold mb-0">{{ $dosenz }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                             <div class="card">
                                 <div class="card-body px-4 py-4-5">
                                     <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
                                             <div class="stats-icon purple mb-2">
                                                 <i class="iconly-boldShow"></i>
                                             </div>
@@ -82,13 +82,34 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Statistik Sitasi Artikel Jurnal Fakultas</h4>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
+                            <div class="d-flex gap-2">
+                            <select id="filter-prodi" class="form-select">
+                                    <option value="">Semua Prodi</option>
+                                    @foreach ($prodies as $prody)
+                                        <option value="{{ $prody->id }}">{{ $prody->prodi_name }}</option>
+                                    @endforeach
+                                </select>
+
+                                <select id="filter-dosen" class="form-select">
+                                    <option value="">Semua Dosen</option>
+                                    @foreach ($dosen as $dosens)
+                                        <option value="{{ $dosens->id }}">{{ $dosens->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                <button class="btn btn-primary" id="apply-filters" onclick="filterChart()">Terapkan</button>
+                            </div>
                         </div>
                         <div class="card-body">
-                            <canvas id="fakultas"></canvas>
+                            <canvas id="universitas" width="400" height="200"></canvas>
+                            <script id="initial-data" type="application/json">
+                                @json($publikasiData)
+                            </script>
                         </div>
                     </div>
                 </div>

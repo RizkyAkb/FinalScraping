@@ -9,15 +9,53 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Fakultas;
 use App\Models\Prodi;
 use App\Models\User;
+use App\Models\Publikasi;
 
 class ProdiController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {        
-        $dosen = User::where('role', 'dosen')->where('prodi_id', Auth::user()->prodi_id)->count();
-        $artikel = Fakultas::count();
-        return view('adminProdi.dashboard', compact('dosen','artikel'));    
+        $user = Auth::user(); // Mendapatkan pengguna yang login
+        if (!$user || $user->role !== 'prodi') {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
+
+        // Ambil ID prodi pengguna
+        $prodiId = $user->prodi_id;
+
+        // Hitung jumlah dosen dalam prodi
+        $dosen = User::where('role', 'dosen')->where('prodi_id', $prodiId)->get();
+        $dosenz = $dosen->count();
+
+        // Hitung jumlah artikel berdasarkan prodi pengguna
+        $artikel = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
+            ->where('users.prodi_id', $prodiId)
+            ->count();
+
+        // Filter data publikasi untuk grafik
+        $dosenId = $request->get('dosen_id');
+
+        $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
+            ->selectRaw("strftime('%Y', publication_date) as year, COUNT(*) as total")
+            ->where('users.prodi_id', $prodiId);
+
+        if ($dosenId) {
+            $publikasiQuery->where('users.id', $dosenId);
+        }
+
+        $publikasiData = $publikasiQuery
+            ->groupBy('year')
+            ->orderBy('year', 'asc')
+            ->get();
+
+        // Jika permintaan AJAX, kembalikan data dalam format JSON
+        if ($request->ajax()) {
+            return response()->json($publikasiData);
+        }
+
+        return view('adminProdi.dashboard', compact('dosen', 'publikasiData', 'artikel', 'dosenz'));
     }
+
 
     public function listDosen()
     {
