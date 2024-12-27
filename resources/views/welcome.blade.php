@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sistem Manajemen Sitasi</title>
 
+    <link rel="icon" type="image/x-icon" href="/assets/img/uns.png" />
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet">
@@ -128,7 +130,7 @@
             </div>
         </div>
     </nav>
-    
+
     <!-- Header Section -->
     <header class="masthead text-center text-white">
         <div class="masthead-content">
@@ -150,20 +152,19 @@
             <div class="row gx-5 align-items-center">
                 <div class="col-lg-6 order-lg-2">
                     <div class="p-3">
-                        <img class="img-fluid rounded-circle" src="assets/img/01.jpg" alt="Person" style="width: 300px; height: 300px;">
+                        <img class="img-fluid rounded-circle" src="assets/img/01.jpg" alt="Person"
+                            style="width: 300px; height: 300px;">
                     </div>
                 </div>
                 <div class="col-lg-6 order-lg-1">
                     <div class="p-3">
                         <h2 class="display-4">Rizky Akbar</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam
-                            sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione
-                            voluptatum molestiae adipisci, beatae obcaecati.</p>
+                        <p>Pendidikan Teknik Informatika dan Komputer - K3521064</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>    
+    </section>
 
     <!-- Content Section 2 -->
     <section class="py-3">
@@ -171,15 +172,14 @@
             <div class="row gx-5 align-items-center">
                 <div class="col-lg-6">
                     <div class="p-3">
-                        <img class="img-fluid rounded-circle" src="assets/img/02.jpg" alt="Person" style="width: 300px; height: 300px;">
+                        <img class="img-fluid rounded-circle" src="assets/img/02.jpg" alt="Person"
+                            style="width: 300px; height: 300px;">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="p-3">
                         <h2 class="display-4">Riyan Bagas</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam
-                            sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione
-                            voluptatum molestiae adipisci, beatae obcaecati.</p>
+                        <p>Pendidikan Teknik Informatika dan Komputer - K3521063</p>
                     </div>
                 </div>
             </div>
@@ -192,15 +192,14 @@
             <div class="row gx-5 align-items-center">
                 <div class="col-lg-6 order-lg-2">
                     <div class="p-3">
-                        <img class="img-fluid rounded-circle" src="assets/img/03.jpg" alt="Person" style="width: 300px; height: 300px;">
+                        <img class="img-fluid rounded-circle" src="assets/img/03.jpg" alt="Person"
+                            style="width: 300px; height: 300px;">
                     </div>
                 </div>
                 <div class="col-lg-6 order-lg-1">
                     <div class="p-3">
                         <h2 class="display-4">Reza Thalib</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam
-                            sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione
-                            voluptatum molestiae adipisci, beatae obcaecati.</p>
+                        <p>Pendidikan Teknik Informatika dan Komputer - K3521062</p>
                     </div>
                 </div>
             </div>

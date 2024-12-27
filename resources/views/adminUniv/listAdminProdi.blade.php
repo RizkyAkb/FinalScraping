@@ -9,7 +9,7 @@
 
         <div class="page-heading">
             <h3>List Admin Prodi</h3>
-            <a href="{{ route('admProdi.add') }}" class="btn btn-success btn-md mb-1">Tambah Prodi</a>
+            <a href="{{ route('admProdi.add') }}" class="btn btn-success btn-md mb-1">Tambah Admin Prodi</a>
         </div>
         <div class="page-content">
             <section class="section">

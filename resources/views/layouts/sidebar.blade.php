@@ -5,7 +5,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dosen - Admin</title>
+        <title>UNS-Manajemen Sitasi</title>
+
+        <link rel="icon" type="image/x-icon" href="/assets/img/uns.png" />
 
         <link rel="shortcut icon"
             href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e"
@@ -188,7 +190,7 @@
                                             <a href="{{ route('fakultas.listAdminProdi') }}" class="submenu-link">Admin
                                                 Prodi</a>
                                         </li>
-                                        
+
                                     </ul>
                                 </li>
                             @endif
@@ -209,7 +211,7 @@
                                         <i class="bi bi-envelope-fill"></i>
                                         <span>Statistik</span>
                                     </a>
-                                </li>                                
+                                </li>
 
                                 <li class="sidebar-item {{ Route::is('prodi.report') ? 'active' : '' }}">
                                     <a href="{{ route('prodi.report') }}" class="sidebar-link">
@@ -218,8 +220,7 @@
                                     </a>
                                 </li>
 
-                                <li
-                                    class="sidebar-item has-sub {{ Route::is('prodi.listDosen') ? 'active' : '' }}">
+                                <li class="sidebar-item has-sub {{ Route::is('prodi.listDosen') ? 'active' : '' }}">
                                     <a href="#" class="sidebar-link">
                                         <i class="bi bi-person-circle"></i>
                                         <span>Admin</span>
@@ -227,7 +228,7 @@
                                     <ul class="submenu">
                                         <li class="submenu-item {{ Route::is('prodi.listDosen') ? 'active' : '' }}">
                                             <a href="{{ route('prodi.listDosen') }}" class="submenu-link">Dosen</a>
-                                        </li>                                        
+                                        </li>
                                     </ul>
                                 </li>
                             @endif
