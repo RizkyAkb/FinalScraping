@@ -1,163 +1,147 @@
 @extends('layouts.sidebar')
 @section('container')
-    <div id="main">
-        <header class="mb-3">
-            <a href="#" class="burger-btn d-block d-xl-none">
-                <i class="bi bi-justify fs-3"></i>
-            </a>
-        </header>
-        <div class="page-content">
-            <section class="section">
-                
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                
-                <div class="d-flex justify-content-end">
-                    <a href="{{ route('scrapeAll') }}" class="btn btn-primary btn-lg" id="scrapeButton">Scraping Data</a>
-                </div>
+<div id="main">
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+    <div class="page-content">
+        <section class="section">
 
-                <div class="page-heading">
-                    <h3>Data Publikasi dan Sitasi Dosen UNS</h3>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table tablex">
-                                <thead>
-                                    <tr>
-                                        <th>Penulis</th>
-                                        <th>Program Studi</th>
-                                        <th>Judul</th>
-                                        <th>Tahun</th>
-                                        <th>Jumlah Sitasi</th>
-                                        <th>Sumber</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($artikels as $artikel)
-                                        <tr>
-                                            <td>{{ $artikel->user->name }}</td>
-                                            <td>{{ $artikel->user->prodi->prodi_name }}</td>
-                                            <td>{{ $artikel->title }}</td>
-                                            <td>{{ $artikel->publication_date ? substr($artikel->publication_date, 0, 4) : '-' }}
-                                            </td>
-                                            <td>{{ $artikel->citations }}</td>
-                                            <td>{{ $artikel->source }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
 
-            <div class="col-12">
-                <div class="page-heading">
-                    <h3>Statistik Sitasi Dosen Antar Prodi</h3>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div style="margin: auto; max-width: 100%;">
-                            <canvas id="pieChart" width="500" height="500"></canvas>
-                        </div>
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('scrapeAll') }}" class="btn btn-primary btn-lg" id="scrapeButton">Scraping Data</a>
+            </div>
+
+            <div class="page-heading">
+                <h3>Data Publikasi dan Sitasi Dosen UNS</h3>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table tablex">
+                            <thead>
+                                <tr>
+                                    <th>Penulis</th>
+                                    <th>Program Studi</th>
+                                    <th>Judul</th>
+                                    <th>Tahun</th>
+                                    <th>Jumlah Sitasi</th>
+                                    <th>Sumber</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($artikels as $artikel)
+                                <tr>
+                                    <td>{{ $artikel->user->name }}</td>
+                                    <td>{{ $artikel->user->prodi->prodi_name }}</td>
+                                    <td>{{ $artikel->title }}</td>
+                                    <td>{{ $artikel->publication_date ? substr($artikel->publication_date, 0, 4) : '-' }}</td>
+                                    <td>{{ $artikel->citations }}</td>
+                                    <td>{{ $artikel->source }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div class="col-12">
-                <div class="page-heading">
-                    <h3>Statistik Sitasi Dosen Antar Fakultas</h3>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div style="margin: auto; max-width: 100%;">
-                            <canvas id="pieChart2" width="500" height="500"></canvas>
-                        </div>
+        <div class="col-12">
+            <div class="page-heading">
+                <h3>Statistik Sitasi Dosen Antar Prodi</h3>
+            </div>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
+                    <div class="d-flex gap-2">
+                    <select id="yearFilterProdi" class="form-select">
+    <option value="" disabled selected>Select Year</option>
+    @foreach($years as $year)
+        <option value="{{ $year->year }}">{{ $year->year }}</option>
+    @endforeach
+</select>
+
+                        <button class="btn btn-primary" id="filters-prodi" onclick="filterChartProdi()">Terapkan</button>
                     </div>
                 </div>
+                <div class="card-body">
+                    <div style="margin: auto; max-width: 100%;">
+                        <canvas id="pieChart" width="500" height="500"></canvas>
+                    </div>
+                    <script id="initial-data" type="application/json">
+                        @json($publikasiData)
+                    </script>
+                </div>
             </div>
-
         </div>
+
+        <div class="col-12">
+            <div class="page-heading">
+                <h3>Statistik Sitasi Dosen Antar Fakultas</h3>
+            </div>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
+                    <div class="d-flex gap-2">
+                    <select id="yearFilterFakultas" class="form-select">
+    <option value="" disabled selected>Select Year</option>
+    @foreach($years as $year)
+        <option value="{{ $year->year }}">{{ $year->year }}</option>
+    @endforeach
+</select>
+
+                        <button class="btn btn-primary" id="filters-fakultas" onclick="filterChartFakultas()">Terapkan</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div style="margin: auto; max-width: 100%;">
+                        <canvas id="pieChart2" width="500" height="500"></canvas>
+                    </div>
+                    <script id="initial-data2" type="application/json">
+                        @json($publikasiData2)
+                    </script>
+                </div>
+            </div>
+        </div>
+
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    window.onload = function() {
+        // Render chart dengan data awal (semua tahun)
+        const initialDataProdi = @json($chartDataProdi);
+        const initialDataFakultas = @json($chartDataFakultas);
+        renderChart(initialDataProdi);
+        renderChart2(initialDataFakultas);
+    };
+
+
+    function renderChart(dataProdi) {
         const ctx1 = document.getElementById('pieChart').getContext('2d');
-        const ctx2 = document.getElementById('pieChart2').getContext('2d');
-        
-        const chartDataProdi = @json($chartDataProdi);
-        const chartDataFakultas = @json($chartDataFakultas);
+        const labelsProdi = dataProdi.map(item => item.prodi);
+        const citationData = dataProdi.map(item => item.citation);
 
-        // Data untuk chart Prodi
-        const labelsProdi = chartDataProdi.map(data => data.prodi);
-        const dataProdi = chartDataProdi.map(data => data.citation);
+        if (window.myChart) {
+            window.myChart.destroy();
+        }
 
-        // Data untuk chart Fakultas
-        const labelsFakultas = chartDataFakultas.map(data => data.fakultas);
-        const dataFakultas = chartDataFakultas.map(data => data.citation);
-
-        // Chart Prodi
-        new Chart(ctx1, {
+        window.myChart = new Chart(ctx1, {
             type: 'pie',
             data: {
                 labels: labelsProdi,
                 datasets: [{
                     label: 'Jumlah Citation',
-                    data: dataProdi,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1,
-                    
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        top: 20,
-                        bottom: 20,
-                        left: 20,
-                        right: 20,
-                    }
-                },
-                plugins: {
-                    legend: {
-                        position: 'bottom', // Geser legenda ke bawah chart untuk lebih banyak ruang
-                        labels: {
-                            boxWidth: 10, // Ukuran kotak warna pada label
-                        }
-                    }
-                }
-            }
-        });
-
-        // Chart Fakultas
-        new Chart(ctx2, {
-            type: 'pie',
-            data: {
-                labels: labelsFakultas,
-                datasets: [{
-                    label: 'Jumlah Citation',
-                    data: dataFakultas,
+                    data: citationData,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
@@ -180,23 +164,107 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        top: 20,
-                        bottom: 20,
-                        left: 20,
-                        right: 20,
-                    }
-                },
                 plugins: {
                     legend: {
-                        position: 'bottom',
-                        labels: {
-                            boxWidth: 10,
-                        }
+                        position: 'bottom'
                     }
                 }
             }
         });
-    </script>
+    }
+
+    function renderChart2(dataFakultas) {
+        const ctx2 = document.getElementById('pieChart2').getContext('2d');
+        const labelsFakultas = dataFakultas.map(item => item.fakultas);
+        const citationData = dataFakultas.map(item => item.citation);
+
+        if (window.myChart2) {
+            window.myChart2.destroy();
+        }
+
+        window.myChart2 = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: labelsFakultas,
+                datasets: [{
+                    label: 'Jumlah Citation',
+                    data: citationData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+
+
+    async function filterChartProdi() {
+        const year = document.getElementById('yearFilterProdi').value;
+        if (!year) return; // Abaikan jika tahun tidak valid atau kosong
+
+        try {
+            const response = await fetch(`/admin/statistik?year=${year}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!response.ok) {
+                console.error('Failed to fetch data:', response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+            renderChart(data.chartDataProdi); // Render ulang chart dengan data terbaru
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function filterChartFakultas() {
+        const year = document.getElementById('yearFilterFakultas').value;
+        if (!year) return; // Abaikan jika tahun tidak valid atau kosong
+
+        try {
+            const response = await fetch(`/admin/statistik?year=${year}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!response.ok) {
+                console.error('Failed to fetch data:', response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+            renderChart2(data.chartDataFakultas); // Render ulang chart dengan data terbaru
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+</script>
 @endsection

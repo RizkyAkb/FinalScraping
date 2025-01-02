@@ -8,6 +8,7 @@ use App\Models\Fakultas;
 use App\Models\Publikasi;
 use App\Models\Prodi;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 
 class AdminController extends Controller
@@ -68,27 +69,82 @@ class AdminController extends Controller
         return view('adminUniv.dashboard', compact('fakultas', 'prodi', 'artikel', 'publikasiData', 'faculties', 'prodies', 'dosen', 'dosenz'));
     }
 
-    public function statistik()
+
+    public function statistik(Request $request)
     {
         $artikels = Publikasi::all();
+        $fakultasId = $request->get('fakultas_id');
+        $prodiId = $request->get('prodi_id');
+        $year = $request->get('year'); // Ambil tahun dari request
+        $years = DB::table('publikasis')
+            ->selectRaw("CASE 
+                    WHEN LENGTH(publication_date) = 4 THEN publication_date
+                    WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date)
+                    ELSE NULL
+                END as year")
+            ->whereNotNull('publication_date')
+            ->whereRaw("CASE 
+                    WHEN LENGTH(publication_date) = 4 THEN publication_date
+                    WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date)
+                    ELSE NULL
+                END IS NOT NULL")
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->get()
+            ->unique('year'); // Menghindari duplikasi tahun
+
+
+        $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
+            ->selectRaw("
+            CASE
+                WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date) 
+                WHEN LENGTH(publication_date) = 4 THEN publication_date
+                ELSE NULL
+            END as year,
+            COUNT(*) as total
+        ");
+
+        // Filter jika tahun dipilih
+        if ($year) {
+            $publikasiQuery->whereRaw("
+            CASE
+                WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date)
+                WHEN LENGTH(publication_date) = 4 THEN publication_date
+                ELSE NULL
+            END = ?
+        ", [$year]);
+        }
+
+        $publikasiData = $publikasiQuery
+            ->groupBy('year')
+            ->orderBy('year', 'asc')
+            ->get();
+
 
         // Ambil data jumlah citation per prodi
-        $dataProdi = Prodi::with(['user.publikasi' => function ($query) {
+        $dataProdi = Prodi::with(['user.publikasi' => function ($query) use ($year) {
+            if ($year) {
+                $query->whereYear('publication_date', $year);
+            }
             $query->selectRaw('author_id, SUM(citations) as total_citation')->groupBy('author_id');
         }])->get();
 
-        // Ambil data jumlah citation per prodi
-        $dataFakultas = Fakultas::with(['user.publikasi' => function ($query) {
+        // Ambil data jumlah citation per fakultas
+        $dataFakultas = Fakultas::with(['user.publikasi' => function ($query) use ($year) {
+            if ($year) {
+                $query->whereYear('publication_date', $year);
+            }
             $query->selectRaw('author_id, SUM(citations) as total_citation')->groupBy('author_id');
         }])->get();
 
+        // Hitung chart data untuk prodi
         $chartDataProdi = $dataProdi->map(function ($prodi) {
             $totalCitation = $prodi->user->reduce(function ($carry, $user) {
                 return $carry + $user->publikasi->sum('total_citation');
             }, 0);
 
             return [
-                'prodi' => $prodi->prodi_name, // Kolom nama prodi
+                'prodi' => $prodi->prodi_name,
                 'citation' => $totalCitation,
             ];
         });
@@ -99,14 +155,27 @@ class AdminController extends Controller
             }, 0);
 
             return [
-                'fakultas' => $fakultas->fakultas_name, // Kolom nama fakultas
+                'fakultas' => $fakultas->fakultas_name,
                 'citation' => $totalCitation,
             ];
         });
 
-        return view('adminUniv.statistik', compact('artikels', 'chartDataProdi', 'chartDataFakultas'));
-    }
 
+        // Jika Anda ingin menduplikasi logika untuk publikasiData2
+        $publikasiData2 = $publikasiQuery->get(); // Dapatkan data yang sama atau sesuaikan sesuai kebutuhan
+
+        if ($request->ajax()) {
+            // Kirim data chart sesuai dengan filter yang diminta
+            $filteredData = [
+                'chartDataProdi' => $chartDataProdi,
+                'chartDataFakultas' => $chartDataFakultas
+            ];
+            return response()->json($filteredData);
+        }
+
+
+        return view('adminUniv.statistik', compact('artikels', 'chartDataProdi', 'chartDataFakultas', 'years', 'publikasiData', 'publikasiData2'));
+    }
     public function listFakultas()
     {
         $faculties = Fakultas::all();
