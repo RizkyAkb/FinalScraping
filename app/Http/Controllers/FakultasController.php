@@ -10,6 +10,9 @@ use App\Models\Fakultas;
 use App\Models\Prodi;
 use App\Models\User;
 use App\Models\Publikasi;
+use App\Models\Dosen;
+use Illuminate\Support\Facades\DB;
+
 
 class FakultasController extends Controller
 {
@@ -75,35 +78,99 @@ class FakultasController extends Controller
     }
 
     public function report()
-    {        
+    {
         return view('user.scrapeTahun');
     }
 
-    public function statistik()
+    public function statistik(Request $request)
     {
         $fakultas_id = Auth::user()->fakultas_id;
+        $fakultasId = $request->get('fakultas_id');
+        $prodiId = $request->get('prodi_id');
+        $year = $request->get('year'); // Ambil tahun dari request
         $artikels = Publikasi::whereHas('user', function ($query) use ($fakultas_id) {
             $query->where('fakultas_id', $fakultas_id);
         })->get();
 
+        // Menghindari duplikasi tahun
+        $years = DB::table('publikasis')
+            ->join('users', 'publikasis.author_id', '=', 'users.id')
+            ->selectRaw("CASE 
+                WHEN LENGTH(publication_date) = 4 THEN publication_date
+                WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date)
+                ELSE NULL
+            END as year")
+            ->whereNotNull('publication_date')
+            ->where('users.fakultas_id', $fakultas_id) // Gunakan fakultas_id dari pengguna login
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->get()
+            ->unique('year');
+
+
+        $publikasiQuery = Publikasi::join('users', 'publikasis.author_id', '=', 'users.id')
+            ->selectRaw("
+            CASE
+                WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date) 
+                WHEN LENGTH(publication_date) = 4 THEN publication_date
+                ELSE NULL
+            END as year,
+            COUNT(*) as total
+        ")
+            ->where('users.fakultas_id', $fakultasId);
+
+        if ($year) {
+            $publikasiQuery->whereRaw("
+            CASE
+                WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date)
+                WHEN LENGTH(publication_date) = 4 THEN publication_date
+                ELSE NULL
+            END = ?
+        ", [$year]);
+        }
+        $publikasiData = $publikasiQuery
+            ->groupBy('year')
+            ->orderBy('year', 'asc')
+            ->get();
+
 
         // Ambil data jumlah citation per prodi
-        $dataFakultas = Fakultas::with(['user.publikasi' => function ($query) {
-            $query->selectRaw('author_id, SUM(citations) as total_citation')->groupBy('author_id');
-        }])->get();        
+        $dataProdi = Prodi::whereHas('user', function ($query) use ($fakultas_id) {
+            $query->where('fakultas_id', $fakultas_id);
+        })
+            ->with(['user.publikasi' => function ($query) use ($year) {
+                if ($year) {
+                    $query->whereYear('publication_date', $year);
+                }
+                $query->selectRaw('author_id, SUM(citations) as total_citation')->groupBy('author_id');
+            }])->get();
 
-        $chartDataFakultas = $dataFakultas->map(function ($fakultas) {
-            $totalCitation = $fakultas->user->reduce(function ($carry, $user) {
+        $chartDataProdi = $dataProdi->map(function ($prodi) {
+            $totalCitation = $prodi->user->reduce(function ($carry, $user) {
                 return $carry + $user->publikasi->sum('total_citation');
             }, 0);
 
             return [
-                'fakultas' => $fakultas->fakultas_name, // Kolom nama fakultas
+                'prodi' => $prodi->prodi_name,
                 'citation' => $totalCitation,
             ];
         });
 
-        return view('adminFakultas.statistik', compact('artikels', 'chartDataFakultas'));
+
+
+
+        $publikasiData2 = $publikasiQuery->get(); // Dapatkan data yang sama atau sesuaikan sesuai kebutuhan
+        if ($request->ajax()) {
+            // Kirim data chart sesuai dengan filter yang diminta
+            $filteredData = [
+                'chartDataProdi' => $chartDataProdi,
+            ];
+            return response()->json($filteredData);
+        }
+
+
+
+        return view('adminFakultas.statistik', compact('artikels', 'chartDataProdi', 'years', 'publikasiData', 'publikasiData2'));
     }
 
     public function listProdi()

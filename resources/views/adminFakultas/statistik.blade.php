@@ -1,95 +1,119 @@
 @extends('layouts.sidebar')
 @section('container')
-    <div id="main">
-        <header class="mb-3">
-            <a href="#" class="burger-btn d-block d-xl-none">
-                <i class="bi bi-justify fs-3"></i>
-            </a>
-        </header>
-        <div class="page-content">
-            <section class="section">
+<div id="main">
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+    <div class="page-content">
+        <section class="section">
 
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+            @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
 
-                <div class="d-flex justify-content-end">
-                    <a href="{{ route('fakultas.scrape', ['id' => Auth::user()->fakultas_id]) }}"
-                        class="btn btn-primary btn-lg" id="scrapeButton">Scraping Data</a>
-                </div>
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('fakultas.scrape', ['id' => Auth::user()->fakultas_id]) }}"
+                    class="btn btn-primary btn-lg" id="scrapeButton">Scraping Data</a>
+            </div>
 
-                <div class="page-heading">
-                    <h3>Data Publikasi dan Sitasi Dosen Fakultas {{ Auth::user()->fakultas->fakultas_name }} </h3>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table tablex">
-                                <thead>
-                                    <tr>
-                                        <th>Penulis</th>
-                                        <th>Program Studi</th>
-                                        <th>Judul</th>
-                                        <th>Tahun</th>
-                                        <th>Jumlah Sitasi</th>
-                                        <th>Sumber</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($artikels as $artikel)
-                                        <tr>
-                                            <td>{{ $artikel->user->name }}</td>
-                                            <td>{{ $artikel->user->prodi->prodi_name }}</td>
-                                            <td>{{ $artikel->title }}</td>
-                                            <td>{{ $artikel->publication_date ? substr($artikel->publication_date, 0, 4) : '-' }}
-                                            </td>
-                                            <td>{{ $artikel->citations }}</td>
-                                            <td>{{ $artikel->source }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <div class="col-12">
-                <div class="page-heading">
-                    <h3>Statistik Sitasi Dosen Antar Fakultas</h3>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div style="margin: auto; max-width: 100%;">
-                            <canvas id="pieChart2" width="500" height="500"></canvas>
-                        </div>
+            <div class="page-heading">
+                <h3>Data Publikasi dan Sitasi Dosen Fakultas {{ Auth::user()->fakultas->fakultas_name }} </h3>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table tablex">
+                            <thead>
+                                <tr>
+                                    <th>Penulis</th>
+                                    <th>Program Studi</th>
+                                    <th>Judul</th>
+                                    <th>Tahun</th>
+                                    <th>Jumlah Sitasi</th>
+                                    <th>Sumber</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($artikels as $artikel)
+                                <tr>
+                                    <td>{{ $artikel->user->name }}</td>
+                                    <td>{{ $artikel->user->prodi->prodi_name }}</td>
+                                    <td>{{ $artikel->title }}</td>
+                                    <td>{{ $artikel->publication_date ? substr($artikel->publication_date, 0, 4) : '-' }}
+                                    </td>
+                                    <td>{{ $artikel->citations }}</td>
+                                    <td>{{ $artikel->source }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+        </section>
 
+        <div class="col-12">
+            <div class="page-heading">
+                <h3>Statistik Sitasi Dosen Antar Prodi</h3>
+            </div>
+            <div class="card">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
+                        <div class="d-flex gap-2">
+                            <select id="yearFilterProdi" class="form-select">
+                                <option value="" disabled selected>Select Year</option>
+                                @foreach($years as $year)
+                                <option value="{{ $year->year }}">{{ $year->year }}</option>
+                                @endforeach
+                            </select>
+
+                            <button class="btn btn-primary" id="filters-prodi" onclick="filterChartProdi()">Terapkan</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div style="margin: auto; max-width: 100%;">
+                            <canvas id="pieChart" width="500" height="500"></canvas>
+                        </div>
+                        <script id="initial-data" type="application/json">
+                            @json($publikasiData)
+                        </script>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx2 = document.getElementById('pieChart2').getContext('2d');
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    window.onload = function() {
+        // Render chart dengan data awal (semua tahun)
+        const initialDataProdi = @json($chartDataProdi);
+        renderChart(initialDataProdi);
+    };
 
-        const chartDataFakultas = @json($chartDataFakultas);
+    function renderChart(dataProdi) {
+        const ctx1 = document.getElementById('pieChart').getContext('2d');
+        const labelsProdi = dataProdi.map(item => item.prodi);
+        const citationData = dataProdi.map(item => item.citation);
 
-        // Data untuk chart Fakultas
-        const labelsFakultas = chartDataFakultas.map(data => data.fakultas);
-        const dataFakultas = chartDataFakultas.map(data => data.citation);
+        if (window.myChart) {
+            window.myChart.destroy();
+        }
 
-        // Chart Fakultas
-        new Chart(ctx2, {
+        window.myChart = new Chart(ctx1, {
             type: 'pie',
             data: {
-                labels: labelsFakultas,
+                labels: labelsProdi,
                 datasets: [{
                     label: 'Jumlah Citation',
-                    data: dataFakultas,
+                    data: citationData,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
@@ -112,23 +136,37 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        top: 20,
-                        bottom: 20,
-                        left: 20,
-                        right: 20,
-                    }
-                },
                 plugins: {
                     legend: {
-                        position: 'bottom',
-                        labels: {
-                            boxWidth: 10,
-                        }
+                        position: 'bottom'
                     }
                 }
             }
         });
-    </script>
+    }
+
+    async function filterChartProdi() {
+        const year = document.getElementById('yearFilterProdi').value;
+        if (!year) return; // Abaikan jika tahun tidak valid atau kosong
+
+        try {
+            const response = await fetch(`/fakultas/statistik?year=${year}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!response.ok) {
+                console.error('Failed to fetch data:', response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+            renderChart(data.chartDataProdi); // Render ulang chart dengan data terbaru
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+</script>
 @endsection

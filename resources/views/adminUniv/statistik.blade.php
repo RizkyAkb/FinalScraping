@@ -62,12 +62,12 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
                     <div class="d-flex gap-2">
-                    <select id="yearFilterProdi" class="form-select">
-    <option value="" disabled selected>Select Year</option>
-    @foreach($years as $year)
-        <option value="{{ $year->year }}">{{ $year->year }}</option>
-    @endforeach
-</select>
+                        <select id="yearFilterProdi" class="form-select">
+                            <option value="" disabled selected>Select Year</option>
+                            @foreach($years as $year)
+                            <option value="{{ $year->year }}">{{ $year->year }}</option>
+                            @endforeach
+                        </select>
 
                         <button class="btn btn-primary" id="filters-prodi" onclick="filterChartProdi()">Terapkan</button>
                     </div>
@@ -91,12 +91,12 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
                     <div class="d-flex gap-2">
-                    <select id="yearFilterFakultas" class="form-select">
-    <option value="" disabled selected>Select Year</option>
-    @foreach($years as $year)
-        <option value="{{ $year->year }}">{{ $year->year }}</option>
-    @endforeach
-</select>
+                        <select id="yearFilterFakultas" class="form-select">
+                            <option value="" disabled selected>Select Year</option>
+                            @foreach($years as $year)
+                            <option value="{{ $year->year }}">{{ $year->year }}</option>
+                            @endforeach
+                        </select>
 
                         <button class="btn btn-primary" id="filters-fakultas" onclick="filterChartFakultas()">Terapkan</button>
                     </div>
