@@ -58,31 +58,29 @@
 
         <div class="col-12">
             <div class="page-heading">
-                <h3>Statistik Sitasi Dosen Antar Prodi</h3>
+                <h3>Statistik Sitasi Dosen Antar Fakultas</h3>
             </div>
             <div class="card">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
-                        <div class="d-flex gap-2">
-                            <select id="yearFilterProdi" class="form-select">
-                                <option value="" disabled selected>Select Year</option>
-                                @foreach($years as $year)
-                                <option value="{{ $year->year }}">{{ $year->year }}</option>
-                                @endforeach
-                            </select>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
+                    <div class="d-flex gap-2">
+                        <select id="yearFilterFakultas" class="form-select">
+                            <option value="" disabled selected>Select Year</option>
+                            @foreach($years as $year)
+                            <option value="{{ $year->year }}">{{ $year->year }}</option>
+                            @endforeach
+                        </select>
 
-                            <button class="btn btn-primary" id="filters-prodi" onclick="filterChartProdi()">Terapkan</button>
-                        </div>
+                        <button class="btn btn-primary" id="filters-fakultas" onclick="filterChartFakultas()">Terapkan</button>
                     </div>
-                    <div class="card-body">
-                        <div style="margin: auto; max-width: 100%;">
-                            <canvas id="pieChart" width="500" height="500"></canvas>
-                        </div>
-                        <script id="initial-data" type="application/json">
-                            @json($publikasiData)
-                        </script>
+                </div>
+                <div class="card-body">
+                    <div style="margin: auto; max-width: 100%;">
+                        <canvas id="pieChart2" width="500" height="500"></canvas>
                     </div>
+                    <script id="initial-data2" type="application/json">
+                        @json($publikasiData2)
+                    </script>
                 </div>
             </div>
         </div>
@@ -94,23 +92,25 @@
 <script>
     window.onload = function() {
         // Render chart dengan data awal (semua tahun)
-        const initialDataProdi = @json($chartDataProdi);
-        renderChart(initialDataProdi);
+        const initialDataFakultas = @json($chartDataFakultas);
+        renderChart2(initialDataFakultas);
     };
 
-    function renderChart(dataProdi) {
-        const ctx1 = document.getElementById('pieChart').getContext('2d');
-        const labelsProdi = dataProdi.map(item => item.prodi);
-        const citationData = dataProdi.map(item => item.citation);
 
-        if (window.myChart) {
-            window.myChart.destroy();
+
+    function renderChart2(dataFakultas) {
+        const ctx2 = document.getElementById('pieChart2').getContext('2d');
+        const labelsFakultas = dataFakultas.map(item => item.fakultas);
+        const citationData = dataFakultas.map(item => item.citation);
+
+        if (window.myChart2) {
+            window.myChart2.destroy();
         }
 
-        window.myChart = new Chart(ctx1, {
+        window.myChart2 = new Chart(ctx2, {
             type: 'pie',
             data: {
-                labels: labelsProdi,
+                labels: labelsFakultas,
                 datasets: [{
                     label: 'Jumlah Citation',
                     data: citationData,
@@ -145,8 +145,11 @@
         });
     }
 
-    async function filterChartProdi() {
-        const year = document.getElementById('yearFilterProdi').value;
+
+   
+
+    async function filterChartFakultas() {
+        const year = document.getElementById('yearFilterFakultas').value;
         if (!year) return; // Abaikan jika tahun tidak valid atau kosong
 
         try {
@@ -162,11 +165,10 @@
             }
 
             const data = await response.json();
-            renderChart(data.chartDataProdi); // Render ulang chart dengan data terbaru
+            renderChart2(data.chartDataFakultas); // Render ulang chart dengan data terbaru
         } catch (error) {
             console.error('Error:', error);
         }
     }
-
 </script>
 @endsection
