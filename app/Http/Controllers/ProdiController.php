@@ -71,7 +71,10 @@ class ProdiController extends Controller
 
     public function statistik(Request $request)
     {
-        $artikels = Publikasi::all();
+        $prodi_id = Auth::user()->prodi_id;
+        $artikels = Publikasi::whereHas('user', function ($query) use ($prodi_id) {
+            $query->where('prodi_id', $prodi_id);
+        })->get();
         $prodiId = $request->get('prodi_id');
         $year = $request->get('year'); // Ambil tahun dari request
         $years = DB::table('publikasis')
@@ -167,10 +170,10 @@ class ProdiController extends Controller
     }
 
     public function report()
-    {
+    {        
         return view('user.scrapeTahun');
     }
-
+    
     // View tambah Prodi (View-Create)
     public function create()
     {

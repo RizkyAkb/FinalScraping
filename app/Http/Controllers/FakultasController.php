@@ -83,7 +83,10 @@ class FakultasController extends Controller
 
     public function statistik(Request $request)
     {
-        $artikels = Publikasi::all();
+        $fakultas_id = Auth::user()->fakultas_id;
+        $artikels = Publikasi::whereHas('user', function ($query) use ($fakultas_id) {
+            $query->where('fakultas_id', $fakultas_id);
+        })->get();
         $fakultasId = $request->get('fakultas_id');
         $year = $request->get('year'); // Ambil tahun dari request
         $years = DB::table('publikasis')
@@ -132,7 +135,7 @@ class FakultasController extends Controller
 
 
         // Ambil data jumlah citation per prodi
-        
+
         // Ambil data jumlah citation per fakultas
         $dataFakultas = Fakultas::with(['user.publikasi' => function ($query) use ($year) {
             if ($year) {
@@ -142,7 +145,7 @@ class FakultasController extends Controller
         }])->get();
 
         // Hitung chart data untuk prodi
-        
+
 
         $chartDataFakultas = $dataFakultas->map(function ($fakultas) {
             $totalCitation = $fakultas->user->reduce(function ($carry, $user) {
@@ -162,7 +165,7 @@ class FakultasController extends Controller
         if ($request->ajax()) {
             // Kirim data chart sesuai dengan filter yang diminta
             $filteredData = [
-               'chartDataFakultas' => $chartDataFakultas
+                'chartDataFakultas' => $chartDataFakultas
             ];
             return response()->json($filteredData);
         }
