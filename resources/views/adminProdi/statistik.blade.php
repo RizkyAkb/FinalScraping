@@ -62,28 +62,26 @@
                 <h3>Statistik Sitasi Dosen Antar Prodi</h3>
             </div>
             <div class="card">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
-                        <div class="d-flex gap-2">
-                            <select id="yearFilterDosen" class="form-select">
-                                <option value="" disabled selected>Select Year</option>
-                                @foreach($years as $year)
-                                <option value="{{ $year->year }}">{{ $year->year }}</option>
-                                @endforeach
-                            </select>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Statistik Artikel Berdasarkan Tahun</h4>
+                    <div class="d-flex gap-2">
+                        <select id="yearFilterProdi" class="form-select">
+                            <option value="" disabled selected>Select Year</option>
+                            @foreach($years as $year)
+                            <option value="{{ $year->year }}">{{ $year->year }}</option>
+                            @endforeach
+                        </select>
 
-                            <button class="btn btn-primary" id="filters-dosen" onclick="filterChartDosen()">Terapkan</button>
-                        </div>
+                        <button class="btn btn-primary" id="filters-prodi" onclick="filterChartProdi()">Terapkan</button>
                     </div>
-                    <div class="card-body">
-                        <div style="margin: auto; max-width: 100%;">
-                            <canvas id="pieChart" width="500" height="500"></canvas>
-                        </div>
-                        <script id="initial-data" type="application/json">
-                            @json($publikasiData)
-                        </script>
+                </div>
+                <div class="card-body">
+                    <div style="margin: auto; max-width: 100%;">
+                        <canvas id="pieChart" width="500" height="500"></canvas>
                     </div>
+                    <script id="initial-data" type="application/json">
+                        @json($publikasiData)
+                    </script>
                 </div>
             </div>
         </div>
@@ -95,13 +93,15 @@
 <script>
     window.onload = function() {
         // Render chart dengan data awal (semua tahun)
-        const initialDataDosen = @json($chartDataDosen);
-        renderChart(initialDataDosen);
+        const initialDataProdi = @json($chartDataProdi);
+        renderChart(initialDataProdi);
     };
-    function renderChart(dataDosen) {
+
+
+    function renderChart(dataProdi) {
         const ctx1 = document.getElementById('pieChart').getContext('2d');
-        const labelsDosen = dataDosen.map(item => item.dosen);
-        const citationData = dataDosen.map(item => item.citation);
+        const labelsProdi = dataProdi.map(item => item.prodi);
+        const citationData = dataProdi.map(item => item.citation);
 
         if (window.myChart) {
             window.myChart.destroy();
@@ -110,7 +110,7 @@
         window.myChart = new Chart(ctx1, {
             type: 'pie',
             data: {
-                labels: labelsDosen,
+                labels: labelsProdi,
                 datasets: [{
                     label: 'Jumlah Citation',
                     data: citationData,
@@ -145,12 +145,15 @@
         });
     }
 
+    
+
+
     async function filterChartProdi() {
         const year = document.getElementById('yearFilterProdi').value;
         if (!year) return; // Abaikan jika tahun tidak valid atau kosong
 
         try {
-            const response = await fetch(`/fakultas/statistik?year=${year}`, {
+            const response = await fetch(`/prodi/statistik?year=${year}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
@@ -168,5 +171,6 @@
         }
     }
 
+    
 </script>
 @endsection
