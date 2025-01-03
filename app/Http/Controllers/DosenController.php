@@ -59,11 +59,11 @@ class DosenController extends Controller
 
     public function statistik(Request $request)
     {
+        $user = Auth::user();
         // Get the articles of the current logged-in user
         $artikels = Publikasi::where('author_id', Auth::user()->id)->get();
 
         // Get the current logged-in user
-        $user = Auth::user();
 
         // Get the dosen data in the same program (prodi)
         $dosenId = User::where('role', 'dosen') // Filter only 'dosen' role
@@ -110,9 +110,11 @@ class DosenController extends Controller
                     WHEN LENGTH(publication_date) = 10 THEN strftime('%Y', publication_date)
                     WHEN LENGTH(publication_date) = 4 THEN publication_date
                     ELSE NULL
-                END = ? 
+                END = ?
             ", [$year]);
         }
+
+
 
 
         // Get the publication data
@@ -127,13 +129,25 @@ class DosenController extends Controller
         }])->get();
 
         // Map the dosen data and prepare the chart data
-        $chartDataDosen = $dosenId->map(function ($dosen) {
-            $totalCitation = $dosen->publikasi->sum('total_citation');
-            return [
-                'name' => $dosen->name,
-                'citation' => $totalCitation,
-            ];
-        });
+        $chartDataDosen = User::where('role', 'dosen') // Mengambil semua user dengan role dosen
+            ->with(['publikasi' => function ($query) use ($year) {
+                if ($year) {
+                    $query->whereYear('publication_date', $year); // Filter berdasarkan tahun jika ada
+                }
+                $query->selectRaw('author_id, SUM(citations) as total_citation')
+                    ->groupBy('author_id');
+            }])
+            ->get()
+            ->map(function ($dosen) {
+                $totalCitation = $dosen->publikasi->sum('total_citation');
+                return [
+                    'dosen' => $dosen->name,
+                    'citation' => $totalCitation,
+                ];
+            });
+
+
+
 
         // Prepare data for the second publication chart (optional, depends on your needs)
         $publikasiData2 = $publikasiQuery->get();

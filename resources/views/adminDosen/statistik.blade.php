@@ -96,14 +96,19 @@
 
     function renderChart(dataDosen) {
         const ctx = document.getElementById('pieChart').getContext('2d');
+        const labelsDosen = dataDosen.map(item => item.dosen);
+        const citationData = dataDosen.map(item => item.citation);
 
-        // Hancurkan chart sebelumnya jika sudah ada
+        // Hancurkan chart sebelumnya jika ada
         if (window.myChart) {
             window.myChart.destroy();
         }
 
-        const labelsDosen = dataDosen.map(item => item.name);
-        const citationData = dataDosen.map(item => item.citation);
+        // Tangani kasus tidak ada data
+        if (dataDosen.length === 0) {
+            alert('Data tidak ditemukan untuk tahun yang dipilih.');
+            return;
+        }
 
         // Render chart baru
         window.myChart = new Chart(ctx, {
@@ -147,11 +152,13 @@
 
 
 
+
     async function filterChartDosen() {
         const year = document.getElementById('yearFilterDosen').value;
-        if (!year) return; // Abaikan jika tahun tidak valid atau kosong
-
-        console.log('Fetching data for year:', year); // Tambahkan log di sini
+        if (!year) {
+            alert('Silakan pilih tahun terlebih dahulu.');
+            return;
+        }
 
         try {
             const response = await fetch(`/dosen/statistik?year=${year}`, {
@@ -166,7 +173,6 @@
             }
 
             const data = await response.json();
-            console.log('Data received:', data); // Tambahkan log di sini untuk melihat data yang diterima
             renderChart(data.chartDataDosen); // Render ulang chart dengan data terbaru
         } catch (error) {
             console.error('Error:', error);
